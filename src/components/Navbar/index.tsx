@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
 
-// Telegram Web App orqali username olish
+// Telegram Web App interfeysini aniqroq tip bilan belgilash
 declare global {
   interface Window {
-    Telegram: any;
+    Telegram: {
+      WebApp: {
+        initDataUnsafe: {
+          user: {
+            username: string;
+          };
+        };
+        ready: () => void;
+      };
+    };
   }
 }
 
 const Navbar: React.FC = () => {
   const [username, setUsername] = useState<string>('');
-  
+
   useEffect(() => {
-    console.log(window.Telegram); // Bu yerda API yuklanganligini tekshiring
-    const tg = window.Telegram?.WebApp;
-    if (tg?.initDataUnsafe?.user?.username) {
-      setUsername(tg.initDataUnsafe.user.username);
+    if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+      const tg = window.Telegram.WebApp;
+      if (tg.initDataUnsafe?.user?.username) {
+        setUsername(tg.initDataUnsafe.user.username);
+      }
+      tg.ready();
     }
-    tg?.ready();
   }, []);
-  
 
   return (
     <div style={styles.container}>
@@ -27,7 +36,7 @@ const Navbar: React.FC = () => {
         <h2>{username}</h2> {/* Foydalanuvchining telegramdagi username'si */}
         <p>Level: <span style={styles.level}>Beginner</span></p> {/* Foydalanuvchi darajasi */}
       </div>
-      
+
       {/* O'ng blok */}
       <div style={styles.rightBlock}>
         <h3>Telegram Kanalimiz</h3>
@@ -49,7 +58,7 @@ const Navbar: React.FC = () => {
 const styles = {
   container: {
     display: 'flex',
-    flexDirection: 'column' as 'column',
+    flexDirection: 'column' as const,
     alignItems: 'center',
     justifyContent: 'center',
     height: '100vh',
@@ -62,7 +71,7 @@ const styles = {
     backgroundColor: '#ffffff',
     borderRadius: '8px',
     width: '80%',
-    textAlign: 'center' as 'center',
+    textAlign: 'center' as const,
   },
   rightBlock: {
     padding: '10px',
@@ -70,11 +79,11 @@ const styles = {
     backgroundColor: '#ffffff',
     borderRadius: '8px',
     width: '80%',
-    textAlign: 'center' as 'center',
+    textAlign: 'center' as const,
   },
   searchContainer: {
     width: '80%',
-    textAlign: 'center' as 'center',
+    textAlign: 'center' as const,
     marginTop: '20px',
   },
   searchInput: {

@@ -1,5 +1,84 @@
 .container
-    display: flex
-    justify-content: center
-    width: 100%
-    gap: 100px
+  display: flex
+  justify-content: space-between
+  align-items: center
+  width: 100%
+  padding: 15px
+  color: #ffffff
+
+.leftBlock
+  display: flex
+  align-items: center
+
+.userInfo
+  display: flex
+  align-items: center
+  gap: 10px
+
+.smileCircle
+  width: 50px
+  height: 50px
+  background: #17212B
+  border-radius: 50%
+  display: flex
+  justify-content: center
+  align-items: center
+
+.smile
+  font-size: 26px
+
+.username
+  font-size: 16px
+  font-family: sans-serif
+
+.level
+  font-size: 12px
+  margin-top: 5px
+  background: #F5F5F5
+  color: #172166
+  padding: 2px 5px
+  border-radius: 4px
+  display: inline-block
+  font-family: sans-serif
+
+.rightBlock
+  text-align: right
+  background: #17212B
+  padding: 3px 15px
+  border-radius: 20px
+  display: inline-block
+
+.adTitle
+  font-size: 16px
+  font-family: sans-serif
+  color: #ffffff
+
+.adLink
+  font-size: 10px
+  font-family: sans-serif
+  color: #708499 !important
+  text-decoration: none
+  &:hover
+    text-decoration: underline
+
+// Search input containeri uchun styling
+.searchContainer
+  margin-top: 15px
+  display: flex
+  justify-content: center
+
+.searchInput
+  width: 90%
+  padding: 10px
+  border: 1px solid #708499
+  border-radius: 25px
+  font-size: 16px
+  background-color: #1C1C1E
+  color: #ffffff
+  outline: none
+
+  &::placeholder
+    color: #708499
+
+  &:focus
+    border-color: #ffffff

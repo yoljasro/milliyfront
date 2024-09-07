@@ -1,0 +1,76 @@
+.ballsContainer
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  min-height: 100vh
+
+.card
+  background: linear-gradient(135deg, #F28023, #EC4878, #9C4CB5, #188DFF)
+  background-size: 400% 400%
+  animation: gradientShift 15s ease infinite
+  border-radius: 15px
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2)
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  padding: 20px
+  width: 300px
+  height: 200px // Adjusted height to fit content
+  text-align: center
+  color: #fff
+  transition: transform 0.3s ease, box-shadow 0.3s ease
+  cursor: pointer
+  margin-top: -300px
+
+.card:hover
+  transform: scale(1.05)
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3)
+
+.cardContent
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+
+.points
+  font-size: 36px
+  font-weight: bold
+  margin: 0
+
+.button
+  margin-top: 20px // Added space between card and button
+  padding: 12px 24px
+  background-color: #007CFF
+  color: #fff
+  border-radius: 5px
+  width: 80%
+  border: none
+  cursor: pointer
+  font-size: 16px
+  font-family: sans-serif
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+  display: inline-block
+  text-align: center
+
+.button:hover
+  background-color: #000
+  color: #fff
+  transform: scale(1.05)
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3)
+
+.button:active
+  background-color: #333
+  color: #fff
+  transform: scale(0.98)
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+
+@keyframes gradientShift
+  0% 
+    background-position: 0% 0%
+  50% 
+    background-position: 100% 100%
+  100% 
+    background-position: 0% 0%

@@ -4,6 +4,11 @@ import styles from "@/styles/Home.module.css";
 import Navbar from "@/components/Navbar";
 import CarouselCards from "@/components/CarouselCards";
 import Balls from "@/components/Balls";
+import Products from "@/components/Products";
+import Food from "@/components/Foods";
+import { Menu } from "@/components/Menu";
+import { Fatest } from "@/components/Fatest";
+import { Popular } from "@/components/Popular";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,9 +33,15 @@ export default function Home() {
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
-       <Navbar/>
+        <CarouselCards/>
+       {/* <Navbar/>
        <CarouselCards/>
        <Balls/>
+       <Products/> */}
+       {/* <Food/> */}
+       {/* <Menu/> */}
+       <Fatest/>
+       <Popular/>
       </div>
     </>
   );

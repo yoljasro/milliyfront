@@ -6,15 +6,17 @@ import styles from './index.module.sass'; // CSS modullarni o'z faylingizga mosl
 
 const CarouselCards: React.FC = () => {
   const settings = {
-    dots: false,
+    dots: true, // Dots qo'shish
     arrows: false,
-    infinite: false,
+    infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 1, // Faqat bitta karta ko'rinadi
     slidesToScroll: 1,
     swipeToSlide: true,
-    centerMode: false,
-    rows: 1,
+    autoplay: true, // Avtomatik slayder uchun
+    autoplaySpeed: 3000, // Slayder tezligi (ms)
+    centerMode: true, // Kartani markazda joylashtirish
+    centerPadding: "0", // Keyingi karta ko'rinmasligi uchun
   };
 
   const handleCardClick = (cardId: number) => {
@@ -26,16 +28,12 @@ const CarouselCards: React.FC = () => {
     <div className={styles.carouselContainer}>
       <Slider {...settings}>
         <div className={styles.card} onClick={() => handleCardClick(1)} >
-          <h3 className={styles.title}> 1</h3>
         </div>
         <div className={styles.cardtwo} onClick={() => handleCardClick(2)} >
-          <h3 className={styles.title}> 2</h3>
         </div>
-        <div className={styles.cardthree} onClick={() => handleCardClick(3)}>
-          <h3 className={styles.title}> 3</h3>
+        <div className={styles.cardthree} onClick={() => handleCardClick(3)} >
         </div>
-        <div className={styles.cardfour} onClick={() => handleCardClick(4)}>
-          <h3 className={styles.title}> 4</h3>
+        <div className={styles.cardfour} onClick={() => handleCardClick(4)} >
         </div>
       </Slider>
     </div>

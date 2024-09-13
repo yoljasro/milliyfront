@@ -1,0 +1,40 @@
+.orderPage
+  padding: 20px
+  background-color: #f9f9f9
+  min-height: 100vh
+
+.orderList
+  display: flex
+  flex-direction: column
+  gap: 20px
+
+.orderItem
+  display: flex
+  gap: 20px
+  border: 1px solid #ddd
+  border-radius: 8px
+  padding: 10px
+  background-color: #fff
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+  transition: transform 0.3s ease, box-shadow 0.3s ease
+
+  &:hover
+    transform: translateY(-5px)
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+
+.orderItem__img
+  flex-shrink: 0
+
+.orderItem__details
+  flex: 1
+
+.favoriteButton
+  background: none
+  border: none
+  cursor: pointer
+  font-size: 24px
+  color: #888
+  transition: color 0.3s ease
+
+.favoriteActive
+  color: red

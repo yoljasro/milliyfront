@@ -1,0 +1,52 @@
+.menu
+  width: 100%
+  display: flex
+  justify-content: center
+  align-content: center
+  align-items: center
+  position: fixed
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: 1000 // Boshqa elementlar ustida ko'rinishi uchun
+
+  &__container
+    display: flex
+    justify-content: center
+    align-content: center
+    align-items: center
+    gap: 38px
+    width: 100%
+    max-width: 342px
+    height: 72px
+    border-radius: 8px
+    padding: 12px 24px 18px 24px
+    border: 1px solid #A4A5B080
+    background: #E1E1E2  
+
+  &__items
+    display: flex   
+    flex-direction: column
+    gap: 8px
+    font-family: rubik-bold
+    font-size: 10px
+    cursor: pointer
+
+  &__title
+    color: #0B0C17
+
+  &__titleone
+    color: #F83B01
+    font-family: rubik-black
+
+  // Aktiv menyu uchun rang
+  &.active
+    &__title, &__titleone
+      color: #F83B01
+
+  // Aktiv menyu rasm uchun rang
+  .activeImage
+    filter: invert(39%) sepia(100%) saturate(3793%) hue-rotate(350deg) brightness(101%) contrast(101%)
+
+  .activeText
+    color: #F83B01

@@ -1,0 +1,109 @@
+.popular
+  margin-top: 33px
+  width: 100%
+
+  &__cont
+    display: flex
+    justify-content: center
+    align-items: center
+
+  &__content
+    display: flex
+    gap: 60px
+
+    p
+      font-size: 18px
+      padding-left: 10px
+      color: #0B0C17
+      font-family: rubik-medium
+
+    button
+      padding: 6px 14px
+      border-radius: 30px
+      border: none
+      color: #F83B01
+      font-size: 12px
+      font-family: rubik-medium
+      background: #FED8CC
+
+  &__cards
+    display: flex
+    gap: 30px
+    margin-top: 20px
+    padding-left: 10px
+    overflow-x: auto
+    scroll-snap-type: x mandatory
+    white-space: nowrap
+    scrollbar-width: none
+    -ms-overflow-style: none
+    margin-left: 30px
+
+    &::-webkit-scrollbar
+      display: none
+
+  &__card
+    flex-shrink: 0
+    width: calc(100% / 2.5)
+    position: relative
+    scroll-snap-align: start
+
+  &__img
+    object-fit: cover
+    border-radius: 8px
+
+  &__favorite
+    position: absolute
+    top: 10px
+    right: 10px
+    cursor: pointer
+
+  &__cardActions
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    position: absolute
+    bottom: 10px
+    right: 10px
+
+  &__addToCart
+    background-color: #F83B01
+    color: white
+    border: none
+    padding: 8px 12px
+    border-radius: 8px
+    cursor: pointer
+    transition: opacity 0.3s
+
+  &__cartCounter
+    display: flex
+    align-items: center
+    background-color: rgba(0, 0, 0, 0.6)
+    color: white
+    padding: 5px 20px
+    border-radius: 8px
+    font-size: 18px
+    font-family: rubish-medium
+
+    & span
+      margin: 0 10px
+
+  &__cartButton
+    border: none
+    background-color: transparent
+    color: white
+    font-size: 18px
+    cursor: pointer
+
+  &__orderButton
+    width: 80%
+    max-width: 300px
+    padding: 10px 20px
+    border: none
+    background-color: #F83B01
+    color: white
+    font-size: 16px
+    border-radius: 8px
+    cursor: pointer
+    margin: 20px auto
+    display: block
+    transition: opacity 0.3s

@@ -1,0 +1,17 @@
+.orderListPage {
+    padding: 20px;
+  }
+  
+  .orderProduct {
+    margin-bottom: 10px;
+  }
+  
+  .productTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .productQuantity {
+    color: #333;
+  }
+  

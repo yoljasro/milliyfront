@@ -1,0 +1,453 @@
+/* Asosiy sahifa dizayni */
+.app {
+  text-align: center;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #17212B;
+  background-image: url('/assets/img/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Mahsulotlar qismi */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+/* Mobil qurilmalar uchun moslashuv */
+@media (max-width: 600px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr); /* Telefon ekranida 2ta kartadan */
+  }
+}
+
+/* Mahsulot kartochkasi */
+/* Mahsulot kartochkasi */
+/* Mahsulot kartochkasi uchun animatsiya */
+.productCard {
+  border-radius: 10px;
+  padding: 15px;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.productCard:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.productCard.fade-in {
+  opacity: 0.5;
+}
+
+.productCard.fade-in.active {
+  opacity: 1;
+}
+
+
+/* Milliy element qo'shish */
+/* .productCard::before {
+  font-size: 2rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+} */
+
+/* Mahsulot rasm */
+.productImage {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Mahsulot ma'lumotlari */
+.productInfo {
+  text-align: center;
+}
+
+.productTitle {
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.productPrice {
+  color: #ff5722;
+  font-size: 1rem;
+  margin: 10px 0 15px;
+}
+
+/* Add button */
+.addButton {
+  padding: 10px 20px;
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.addButton:hover {
+  background-color: #e64a19;
+  transform: translateY(-2px);
+}
+
+.counterWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.counterButton {
+  background-color: #ff5722;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+.counterButton:hover {
+  background-color: #e64a19;
+}
+
+.counter {
+  padding: 0 10px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Buyurtma tugmasi */
+.orderButton {
+  padding: 15px 30px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.orderButton:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+}
+
+/* Buyurtma qismi */
+.orderView {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.orderView h2 {
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.orderView ul {
+  list-style: none;
+  padding: 0;
+}
+
+.orderView li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.orderView img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.orderView label {
+  display: block;
+  margin: 10px 0;
+}
+
+.orderView input {
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Modal Content */
+.modalContent {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Order List */
+.orderList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.orderImage {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.orderDetails {
+  flex: 1;
+}
+
+/* Animation Keyframes */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Form and Button Styles */
+.orderForm {
+  margin-top: 20px;
+}
+
+.submitOrderButton {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submitOrderButton:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+}
+
+/* Modal Overlay */
+/* Modal Overlay */
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/assets/img/bg.jpg"); /* Set the background image */
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+.order{
+  color: #17212B;
+  padding-bottom: 10px;
+}
+
+/* Modal Content */
+.modalContent {
+  background: rgba(255, 255, 255, 0.9); /* Light background for readability */
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  position: relative;
+  height: 90%;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Close Button */
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.3rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.closeButton:hover {
+  background-color: #1976d2;
+  transform: scale(1.1);
+}
+
+/* Order List */
+.orderList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.orderItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.orderImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 20px;
+  transition: transform 0.3s ease;
+}
+
+.orderImage:hover {
+  transform: scale(1.05);
+}
+
+.orderDetails {
+  flex: 1;
+}
+
+.orderDetails span {
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Form and Button Styles */
+.orderForm {
+  margin-top: 20px;
+}
+
+.submitOrderButton {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.submitOrderButton:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+}
+
+/* Delivery Type Style */
+.orderForm label {
+  display: block;
+  margin: 10px 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.orderForm select,
+.orderForm input {
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.orderForm select:focus,
+.orderForm input:focus {
+  border-color: #2196f3;
+}
+
+.orderForm input::placeholder {
+  color: #aaa;
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './index.module.sass';
+import Link from 'next/link';
 
 const Balls: React.FC = () => {
   const handleOrderClick = () => {
@@ -16,9 +17,11 @@ const Balls: React.FC = () => {
           <div className={styles.points}>0 баллов</div>
         </div>
       </div>
-      <button className={styles.button} onClick={handleOrderClick}>
+<a className={styles.link} href={'#products'}>
+      <button  className={styles.button} onClick={handleOrderClick}>
         Выбрать и заказать
       </button>
+      </a>
     </div>
   );
 };

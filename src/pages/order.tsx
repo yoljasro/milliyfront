@@ -1,31 +1,26 @@
-// pages/order.tsx
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-import styles from '../styles/order.module.sass'; // Ensure this path matches your file structure
+import styles from '../styles/order.module.sass';
 
-interface Card {
-  id: number;
-  imgUrl: string;
-  title: string;
-  price: string;
-  description: string;
+interface CartItem {
+  quantity: number;
+  product: {
+    img: string;
+    title: string;
+    price: string;
+  };
 }
 
 const OrderPage: React.FC = () => {
   const router = useRouter();
   const { query } = router;
-  const [cartItems, setCartItems] = useState<{ [key: number]: number }>({});
-  const [favorites, setFavorites] = useState<number[]>([]);
-
-  // Dummy data for card details
-  const cardDetails: { [key: number]: Card } = {
-    1: { id: 1, imgUrl: '/assets/img/fatest1.png', title: 'Crazy Taco', price: '$10', description: 'Delicious tacos, appetizing snacks, and more...' },
-    2: { id: 2, imgUrl: '/assets/img/fatest2.png', title: 'Burger Bonanza', price: '$12', description: 'Juicy burgers with a variety of toppings...' },
-    3: { id: 3, imgUrl: '/assets/img/fatest3.png', title: 'Pizza Party', price: '$15', description: 'Cheesy pizza with your favorite toppings...' },
-    // Add more items as needed
-  };
+  const [cartItems, setCartItems] = useState<{ [key: string]: CartItem }>({});
+  const [deliveryType, setDeliveryType] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [showSubmitButton, setShowSubmitButton] = useState<boolean>(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
 
   useEffect(() => {
     if (query.items) {
@@ -33,21 +28,63 @@ const OrderPage: React.FC = () => {
     }
   }, [query.items]);
 
-  useEffect(() => {
-    // Load favorites from local storage or other source
-    const storedFavorites = localStorage.getItem('favoriteItems');
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-  }, []);
+  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setDeliveryType(value);
+    setShowSubmitButton(value === 'самовывоз');
+  };
 
-  const toggleFavorite = (cardId: number) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(cardId)
-        ? prevFavorites.filter((id) => id !== cardId)
-        : [...prevFavorites, cardId]
-    );
-    localStorage.setItem('favoriteItems', JSON.stringify(favorites));
+  const handleOrder = async () => {
+    const calculateTotalPrice = () => {
+      return Object.values(cartItems).reduce((total, item) => {
+        const price = parseFloat(item.product.price);
+        return !isNaN(price) ? total + price * item.quantity : total;
+      }, 0);
+    };
+
+    const totalPrice = calculateTotalPrice();
+
+    if (isNaN(totalPrice)) {
+      alert('Invalid total price.');
+      return;
+    }
+
+    const orderData = {
+      products: Object.entries(cartItems).map(([cardId, item]) => ({
+        productId: cardId,
+        productName: item.product.title,
+        quantity: item.quantity,
+      })),
+      deliveryType,
+      address: deliveryType === 'доставка' ? address : '',
+      phone: deliveryType === 'доставка' ? phone : '',
+      totalPrice: totalPrice,
+      paymentStatus: deliveryType === 'самовывоз' ? 'pending' : 'unpaid',
+    };
+
+    try {
+      const response = await fetch('http://localhost:9000/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to place order');
+      }
+
+      setShowSuccessAlert(true);
+      setTimeout(() => setShowSuccessAlert(false), 3000); // Hide alert after 3 seconds
+
+      // Optionally, navigate to another page or refresh
+    } catch (error) {
+      console.error('Error:', error);
+      alert(`Failed to place order. Error: ${error.message}`);
+    }
   };
 
   return (
@@ -55,27 +92,24 @@ const OrderPage: React.FC = () => {
       <h1>Your Order</h1>
       {Object.keys(cartItems).length > 0 ? (
         <div className={styles.orderList}>
-          {Object.entries(cartItems).map(([cardId, quantity]) => {
-            const card = cardDetails[parseInt(cardId)];
-            if (!card) return null;
-
+          {Object.entries(cartItems).map(([cardId, cartItem]) => {
+            const { product, quantity } = cartItem;
             return (
               quantity > 0 && (
                 <div key={cardId} className={styles.orderItem}>
-                  <div className={styles.orderItem__img}>
-                    <Image src={card.imgUrl} alt={card.title} width={150} height={100} />
+                  <div className={styles.orderItemImage}>
+                    <Image
+                      src={product.img}
+                      alt={product.title}
+                      width={120}
+                      height={100}
+                      className={styles.imglast}
+                    />
                   </div>
-                  <div className={styles.orderItem__details}>
-                    <h2>{card.title}</h2>
-                    <p>{card.description}</p>
-                    <p><strong>Price:</strong> {card.price}</p>
-                    <p><strong>Quantity:</strong> {quantity}</p>
-                    <button
-                      className={`${styles.favoriteButton} ${favorites.includes(card.id) ? styles.favoriteActive : ''}`}
-                      onClick={() => toggleFavorite(card.id)}
-                    >
-                      {favorites.includes(card.id) ? <AiFillHeart /> : <AiOutlineHeart />}
-                    </button>
+                  <div className={styles.orderItemDetails}>
+                    <h3>{product.title}</h3>
+                    <p className={styles.price}>{product.price}</p>
+                    <p className={styles.quantity}>Quantity: {quantity}</p>
                   </div>
                 </div>
               )
@@ -83,7 +117,70 @@ const OrderPage: React.FC = () => {
           })}
         </div>
       ) : (
-        <p>No items in the cart.</p>
+        <p>No items in your cart.</p>
+      )}
+
+      <div className={styles.deliveryType}>
+        <h2>Тип доставки</h2>
+        <label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="доставка"
+            checked={deliveryType === 'доставка'}
+            onChange={handleDeliveryChange}
+          />
+          Доставка
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="deliveryType"
+            value="самовывоз"
+            checked={deliveryType === 'самовывоз'}
+            onChange={handleDeliveryChange}
+          />
+          Самовывоз
+        </label>
+      </div>
+
+      {deliveryType === 'доставка' && (
+        <div className={styles.deliveryInfo}>
+          <label>
+            Address:
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter delivery address"
+            />
+          </label>
+          <label>
+            Phone Number:
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Enter phone number"
+            />
+          </label>
+        </div>
+      )}
+
+      {showSubmitButton ? (
+        <button className={styles.submitButton} onClick={handleOrder}>
+          Submit Order
+        </button>
+      ) : (
+        <button className={styles.paymentButton} onClick={handleOrder}>
+          Payment
+        </button>
+      )}
+
+      {showSuccessAlert && (
+        <div className={styles.successAlert}>
+          Order placed successfully!
+        </div>
       )}
     </div>
   );

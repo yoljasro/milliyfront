@@ -1,0 +1,50 @@
+.modalOverlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: rgba(0, 0, 0, 0.5)
+  display: flex
+  align-items: center
+  justify-content: center
+
+.modalContent
+  background-color: #fff
+  padding: 20px
+  border-radius: 10px
+  width: 80%
+  max-width: 600px
+  position: relative
+
+  h2
+    font-size: 24px
+    font-weight: 700
+    color: #333
+    margin-bottom: 20px
+
+  .orderDetails
+    font-size: 16px
+    color: #333
+
+    h3
+      font-size: 20px
+      font-weight: 600
+      margin-bottom: 10px
+
+    ul
+      list-style-type: none
+      padding: 0
+
+      li
+        margin-bottom: 10px
+
+  .closeButton
+    position: absolute
+    top: 10px
+    right: 10px
+    border: none
+    background: none
+    font-size: 20px
+    cursor: pointer
+    color: #333

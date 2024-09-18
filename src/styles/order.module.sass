@@ -1,17 +1,26 @@
+$order-page-background-color: #f4f4f4
+$order-item-border-color: #ddd
+$order-item-background-color: #fff
+$order-item-hover-shadow: rgba(0, 0, 0, 0.15)
+$order-item-hover-transform: scale(1.02)
+$primary-color: #007bff
+$primary-hover-color: #0056b3
+$primary-active-color: #004080
+$success-color: #28a745
+$text-color-dark: #333
+$text-color-light: #666
+$border-radius: 10px
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
+$transition-duration: 0.3s
+
 .orderPage
   padding: 20px
-  background-color: #f4f4f4
+  background-color: $order-page-background-color
   min-height: 100vh
-  overflow-y: auto  // Ensure scrollability if content overflows
+  overflow-y: auto
+  font-family: Arial, sans-serif
 
-  h1
-    text-align: center
-    font-size: 28px
-    margin-bottom: 20px
-    font-weight: 700
-    color: #333
-
-.orderList
+.orderItems
   display: flex
   flex-direction: column
   gap: 20px
@@ -20,25 +29,27 @@
 .orderItem
   display: flex
   gap: 20px
-  border: 2px solid #ddd
-  border-radius: 10px
+  border: 2px solid $order-item-border-color
+  border-radius: $border-radius
   padding: 15px
-  background-color: #fff
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
-  transition: transform 0.4s ease, box-shadow 0.4s ease
-  animation: slideIn 0.5s ease-out forwards
+  background-color: $order-item-background-color
+  box-shadow: $box-shadow
+  transition: transform $transition-duration ease, box-shadow $transition-duration ease
+  animation: fadeIn 0.5s ease-out forwards
 
   &:hover
-    transform: translateY(-8px) scale(1.02)
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
+    transform: translateY(-5px) scale($order-item-hover-transform)
+    box-shadow: 0 6px 12px $order-item-hover-shadow
 
 .orderItemImage
   flex-shrink: 0
 
 .orderItemImage img
-  border-radius: 10px
-  transition: all 0.3s ease
+  border-radius: 8px
+  transition: all $transition-duration ease
   object-fit: cover
+  width: 100%
+  height: auto
 
 .orderItemDetails
   flex: 1
@@ -47,85 +58,100 @@
   justify-content: center
 
   h3
-    font-size: 20px
-    font-family: rubish-medium
+    font-size: 18px
     font-weight: 600
-    color: #444
+    color: $text-color-dark
 
   p
-    font-size: 15px
-    padding-top: 5px
-    color: #666
+    font-size: 14px
+    color: $text-color-light
 
   .price
     font-size: 16px
-    padding-top: 5px
-    color: #333
+    color: $text-color-dark
     font-weight: 700
 
-.deliveryType
+.deliveryOptions
   margin-top: 20px
 
   h2
     font-size: 22px
     font-weight: 600
-    color: #333
+    color: $text-color-dark
 
-  label
-    display: block
-    margin: 10px 0
-    color: #333
+  .deliveryChoices
+    display: flex
+    gap: 100px
+    color: #000
+    margin-top: 20px
     font-family: rubish-medium
     font-size: 20px
 
-  input[type='radio']
-    margin-right: 10px
+    label
+      display: flex
+      align-items: center
+      gap: 10px
+      cursor: pointer
+      transition: color $transition-duration ease
 
-.deliveryInfo
-  margin-top: 20px
+      &:hover
+        color: $primary-color
+
+      input[type='radio']
+        accent-color: $primary-color
+
+.deliveryDetails
+  // margin-top: 50px
+  // display: flex
+  // gap: 50px
   padding: 20px
-  background-color: #333
-  border: 1px solid #ddd
-  border-radius: 10px
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
-  animation: fadeIn 0.5s ease-out forwards
+  background-color: $order-item-background-color
+  border: 1px solid $order-item-border-color
+  border-radius: $border-radius
+  box-shadow: $box-shadow
 
   label
     display: block
     margin: 10px 0
-    color: #fff
-    font-size: 18px
+    color: $text-color-dark
+    font-size: 16px
 
   input
     width: 100%
     padding: 10px
-    border: none
+    border: 1px solid $order-item-border-color
     border-radius: 5px
     margin-top: 5px
+    font-size: 14px
 
-.submitButton, .paymentButton
-  display: block
+.orderActions
+  display: flex
+  justify-content: center
   margin-top: 20px
+
+.submitButton
   padding: 15px 20px
   border: none
   border-radius: 5px
   font-size: 18px
   font-weight: 600
   cursor: pointer
-  transition: background-color 0.3s ease
-  background-color: #007bff
+  transition: background-color $transition-duration ease, transform 0.2s ease
+  background-color: $primary-color
   color: #fff
   text-align: center
 
   &:hover
-    background-color: #0056b3
+    background-color: $primary-hover-color
+    transform: scale(1.05)
+
+  &:active
+    background-color: $primary-active-color
 
 .successAlert
-  margin-top: 20px
   padding: 15px
   border-radius: 5px
-  background-color: #28a745
+  background-color: $success-color
   color: #fff
   text-align: center
-  font-size: 18px
-  font-weight: 600
+  margin-top: 20px

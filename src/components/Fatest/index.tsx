@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './index.module.sass';
 import Image from 'next/image';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 
 interface Product {
-  img: string;
+  _id: string;
   title: string;
-  price: string;
-  desc: string;
+  price: number;
+  image: string;
 }
 
 interface CartItem {
@@ -16,30 +16,56 @@ interface CartItem {
   product: Product;
 }
 
-const productDetails: Record<number, Product> = {
-  1: { img: '/assets/img/fatest1.png', title: 'Crazy Taco', price: '$10', desc: 'Delicious tacos, appetizing snacks, and more...' },
-  2: { img: '/assets/img/fatest1.png', title: 'Burger Bonanza', price: '$12', desc: 'Juicy burgers with a variety of toppings...' },
-  3: { img: '/assets/img/fatest1.png', title: 'Pizza Party', price: '$15', desc: 'Cheesy pizza with your favorite toppings...' },
-  // Add more products as needed
-};
-
-export const Fatest: React.FC = () => {
-  const [favorites, setFavorites] = useState<number[]>([]);
-  const [cart, setCart] = useState<{ [key: number]: CartItem }>({});
-  const [showAddButton, setShowAddButton] = useState<number | null>(null);
-  const [animatingCard, setAnimatingCard] = useState<number | null>(null);
-  const [showCounter, setShowCounter] = useState<number | null>(null);
+const Fatest: React.FC = () => {
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [cart, setCart] = useState<{ [key: string]: CartItem }>({});
+  const [animatingCard, setAnimatingCard] = useState<string | null>(null);
+  const [productDetails, setProductDetails] = useState<Record<string, Product>>({});
   const router = useRouter();
 
-  const toggleFavorite = (cardId: number) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(cardId)
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://milliy.kardise.com/products');
+        const data = await response.json();
+
+        const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
+          acc[product._id] = {
+            ...product,
+            image: `http://milliy.kardise.com${product.image}`,
+          };
+          return acc;
+        }, {});
+
+        setProductDetails(productsMap);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('favoriteItems');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  const toggleFavorite = (cardId: string) => {
+    setFavorites((prevFavorites) => {
+      const newFavorites = prevFavorites.includes(cardId)
         ? prevFavorites.filter((id) => id !== cardId)
-        : [...prevFavorites, cardId]
-    );
+        : [...prevFavorites, cardId];
+
+      localStorage.setItem('favoriteItems', JSON.stringify(newFavorites));
+
+      return newFavorites;
+    });
   };
 
-  const addToCart = (cardId: number) => {
+  const addToCart = (cardId: string) => {
     setAnimatingCard(cardId);
     setTimeout(() => {
       setAnimatingCard(null);
@@ -53,13 +79,11 @@ export const Fatest: React.FC = () => {
           product: productDetails[cardId]
         }
       };
-      setShowCounter(cardId);
-      setShowAddButton(null);
       return newCart;
     });
   };
 
-  const removeFromCart = (cardId: number) => {
+  const removeFromCart = (cardId: string) => {
     setCart((prevCart) => {
       const newCart = {
         ...prevCart,
@@ -68,32 +92,27 @@ export const Fatest: React.FC = () => {
           product: productDetails[cardId]
         }
       };
-      setShowCounter(Object.keys(newCart).find(id => newCart[parseInt(id)].quantity > 0) ? cardId : null);
-      if (newCart[cardId].quantity === 0) setShowAddButton(cardId);
       return newCart;
     });
   };
 
-  const getCartQuantity = (cardId: number) => cart[cardId]?.quantity || 0;
+  const getCartQuantity = (cardId: string) => cart[cardId]?.quantity || 0;
 
-const handleOrderNow = () => {
-  const selectedItems = Object.entries(cart)
-    // .filter(([_, { quantity }]) => quantity > 0)
-    .reduce((acc, [id, item]) => {
-      acc[parseInt(id)] = item; 
-       // id ni parseInt orqali raqamga aylantiramiz
-      return acc;
-    }, {} as { [key: number]: CartItem });
+  const handleOrderNow = () => {
+    const selectedItems = Object.entries(cart)
+      .reduce((acc, [id, item]) => {
+        acc[id] = item;
+        return acc;
+      }, {} as { [key: string]: CartItem });
 
-  if (Object.keys(selectedItems).length > 0) {
-    router.push({
-      pathname: '/order',
-      query: { items: JSON.stringify(selectedItems) }
-    });
-  }
-};
+    if (Object.keys(selectedItems).length > 0) {
+      router.push({
+        pathname: '/order',
+        query: { items: JSON.stringify(selectedItems) }
+      });
+    }
+  };
 
-  // Check if there are any items in the cart to show the Order Now button
   const hasItemsInCart = Object.values(cart).some(item => item.quantity > 0);
 
   return (
@@ -106,32 +125,40 @@ const handleOrderNow = () => {
       </div>
       <div className={styles.fatest__cards}>
         {Object.keys(productDetails).map((cardId) => (
-          <div key={cardId}
-               className={`${styles.fatest__card} ${favorites.includes(parseInt(cardId)) ? styles.fatest__cardActive : ''}`}
-               onMouseEnter={() => setShowAddButton(parseInt(cardId))}
-               onMouseLeave={() => setShowAddButton(null)}>
-            <div className={styles.fatest__favorite} onClick={(e) => { e.stopPropagation(); toggleFavorite(parseInt(cardId)); }}>
-              {favorites.includes(parseInt(cardId)) ? <AiFillHeart /> : <AiOutlineHeart />}
+          <div
+            key={cardId}
+            className={`${styles.fatest__card} ${favorites.includes(cardId) ? styles.fatest__cardActive : ''}`}
+          >
+            <div className={styles.fatest__favorite} onClick={(e) => { e.stopPropagation(); toggleFavorite(cardId); }}>
+              {favorites.includes(cardId) ? <AiFillHeart /> : <AiOutlineHeart />}
             </div>
-            <Image className={styles.fatest__img} src={productDetails[parseInt(cardId)].img} alt='fatest1' width={270} height={122} layout="responsive" />
-            <p className={styles.fatest__title}>{productDetails[parseInt(cardId)].title}</p>
-            <p className={styles.fatest__desc}>{productDetails[parseInt(cardId)].desc}</p>
+            <Image
+              className={styles.fatest__img}
+              src={productDetails[cardId].image}
+              alt={productDetails[cardId].title}
+              width={270}
+              height={122}
+              layout="responsive"
+            />
+            <p className={styles.fatest__title}>{productDetails[cardId].title}</p>
+            <p className={styles.fatest__price}>{productDetails[cardId].price} UZS</p>
             <div className={styles.fatest__timer}>
               <Image alt='timer' src={'/assets/img/timer.svg'} width={16} height={16} />
               <p>40-50min</p>
             </div>
             <div className={styles.fatest__cardActions}>
-              {showAddButton === parseInt(cardId) && getCartQuantity(parseInt(cardId)) === 0 && (
-                <button className={`${styles.fatest__addToCart} ${showAddButton === parseInt(cardId) ? styles.fatest__addToCartVisible : ''}`}
-                        onClick={(e) => { e.stopPropagation(); addToCart(parseInt(cardId)); }}>
+              {getCartQuantity(cardId) === 0 ? (
+                <button
+                  className={styles.fatest__addToCart}
+                  onClick={(e) => { e.stopPropagation(); addToCart(cardId); }}
+                >
                   Add to Cart
                 </button>
-              )}
-              {showCounter === parseInt(cardId) && getCartQuantity(parseInt(cardId)) > 0 && (
-                <div className={`${styles.fatest__cartCounter} ${animatingCard === parseInt(cardId) ? styles.fatest__cartCounterAnimating : ''}`}>
-                  <button onClick={(e) => { e.stopPropagation(); removeFromCart(parseInt(cardId)); }}>-</button>
-                  <span>{getCartQuantity(parseInt(cardId))}</span>
-                  <button onClick={(e) => { e.stopPropagation(); addToCart(parseInt(cardId)); }}>+</button>
+              ) : (
+                <div className={`${styles.fatest__cartCounter} ${animatingCard === cardId ? styles.fatest__cartCounterAnimating : ''}`}>
+                  <button onClick={(e) => { e.stopPropagation(); removeFromCart(cardId); }}>-</button>
+                  <span>{getCartQuantity(cardId)}</span>
+                  <button onClick={(e) => { e.stopPropagation(); addToCart(cardId); }}>+</button>
                 </div>
               )}
             </div>
@@ -146,3 +173,5 @@ const handleOrderNow = () => {
     </div>
   );
 };
+
+export default Fatest;

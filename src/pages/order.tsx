@@ -19,7 +19,6 @@ const OrderPage: React.FC = () => {
   const [deliveryType, setDeliveryType] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [showSubmitButton, setShowSubmitButton] = useState<boolean>(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const OrderPage: React.FC = () => {
   const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setDeliveryType(value);
-    setShowSubmitButton(value === 'самовывоз');
   };
 
   const handleOrder = async () => {
@@ -63,7 +61,7 @@ const OrderPage: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:9000/orders', {
+      const response = await fetch('http://milliy.kardise.com/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,115 +69,89 @@ const OrderPage: React.FC = () => {
         body: JSON.stringify(orderData),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to place order');
+        throw new Error('Network response was not ok.');
       }
 
       setShowSuccessAlert(true);
-      setTimeout(() => setShowSuccessAlert(false), 3000); // Hide alert after 3 seconds
-
-      // Optionally, navigate to another page or refresh
     } catch (error) {
-      console.error('Error:', error);
-      alert(`Failed to place order. Error: ${error}`);
+      console.error('Failed to place order:', error);
+      alert('Failed to place order. Please try again.');
     }
   };
 
   return (
     <div className={styles.orderPage}>
-      <h1>Your Order</h1>
-      {Object.keys(cartItems).length > 0 ? (
-        <div className={styles.orderList}>
-          {Object.entries(cartItems).map(([cardId, cartItem]) => {
-            const { product, quantity } = cartItem;
-            return (
-              quantity > 0 && (
-                <div key={cardId} className={styles.orderItem}>
-                  <div className={styles.orderItemImage}>
-                    <Image
-                      src={product.img}
-                      alt={product.title}
-                      width={120}
-                      height={100}
-                      className={styles.imglast}
-                    />
-                  </div>
-                  <div className={styles.orderItemDetails}>
-                    <h3>{product.title}</h3>
-                    <p className={styles.price}>{product.price}</p>
-                    <p className={styles.quantity}>Quantity: {quantity}</p>
-                  </div>
-                </div>
-              )
-            );
-          })}
-        </div>
-      ) : (
-        <p>No items in your cart.</p>
-      )}
-
-      <div className={styles.deliveryType}>
-        <h2>Тип доставки</h2>
-        <label>
-          <input
-            type="radio"
-            name="deliveryType"
-            value="доставка"
-            checked={deliveryType === 'доставка'}
-            onChange={handleDeliveryChange}
-          />
-          Доставка
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="deliveryType"
-            value="самовывоз"
-            checked={deliveryType === 'самовывоз'}
-            onChange={handleDeliveryChange}
-          />
-          Самовывоз
-        </label>
+      <div className={styles.orderItems}>
+        <h2>Order Details</h2>
+        {Object.entries(cartItems).map(([id, item]) => (
+          <div key={id} className={styles.orderItem}>
+            <div className={styles.orderItemImage}>
+              <Image src={'/assets/img/foodlast.jpg'} alt={item.product.title} width={150} height={150} layout="intrinsic" />
+            </div>
+            <div className={styles.orderItemDetails}>
+              <h3>{item.product.title}</h3>
+              <p className={styles.price}>{item.product.price} UZS</p>
+              <p>Quantity: {item.quantity}</p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {deliveryType === 'доставка' && (
-        <div className={styles.deliveryInfo}>
+      <div className={styles.deliveryOptions}>
+        <h2>Delivery Options</h2>
+        <div className={styles.deliveryChoices}>
           <label>
-            Address:
             <input
-              type="text"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder="Enter delivery address"
+              type="radio"
+              value="доставка"
+              checked={deliveryType === 'доставка'}
+              onChange={handleDeliveryChange}
             />
+            Доставка
           </label>
           <label>
-            Phone Number:
             <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Enter phone number"
+              type="radio"
+              value="самовывоз"
+              checked={deliveryType === 'самовывоз'}
+              onChange={handleDeliveryChange}
             />
+            Самовывоз
           </label>
         </div>
-      )}
 
-      {showSubmitButton ? (
-        <button className={styles.submitButton} onClick={handleOrder}>
-          Submit Order
-        </button>
-      ) : (
-        <button className={styles.paymentButton} onClick={handleOrder}>
-          Payment
-        </button>
-      )}
+        {deliveryType === 'доставка' && (
+          <div className={styles.deliveryDetails}>
+            <label>
+              Address:
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Phone:
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.orderActions}>
+        <button className={styles.submitButton} onClick={handleOrder}>Place Order</button>
+      </div>
 
       {showSuccessAlert && (
         <div className={styles.successAlert}>
-          Order placed successfully!
+          <p>Order placed successfully!</p>
         </div>
       )}
     </div>

@@ -37,8 +37,8 @@ export const Menu: React.FC = () => {
               height={24}
               className={activeMenu === 'discover' ? styles.activeImage : ''}
             />
-            <p className={`${styles.menu__title} ${activeMenu === 'discover' ? styles.activeText : ''}`}>
-              Обнаружить
+            <p className={`${styles.menu__titleone} ${activeMenu === 'discover' ? styles.activeText : ''}`}>
+              Каталог
             </p>
           </div>
         </Link>

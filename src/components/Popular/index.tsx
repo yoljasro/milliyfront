@@ -36,7 +36,7 @@ const Card: React.FC<CardProps> = ({ id, imgUrl, onFavorite, isFavorited, addToC
           <AiOutlineHeart size={24} /> // Yurak konturli
         )}
       </div>
-      <div className={styles.popular__cardActions}>
+      {/* <div className={styles.popular__cardActions}>
         {showCounter && getCartQuantity(id) > 0 ? (
           <div className={styles.popular__cartCounter}>
             <button onClick={() => addToCart(id)} className={styles.popular__cartButton}>+</button>
@@ -48,7 +48,7 @@ const Card: React.FC<CardProps> = ({ id, imgUrl, onFavorite, isFavorited, addToC
             Add to Cart
           </button>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

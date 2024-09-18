@@ -83,7 +83,7 @@ const OrderPage: React.FC = () => {
       // Optionally, navigate to another page or refresh
     } catch (error) {
       console.error('Error:', error);
-      alert(`Failed to place order. Error: ${error.message}`);
+      alert(`Failed to place order. Error: ${error}`);
     }
   };
 

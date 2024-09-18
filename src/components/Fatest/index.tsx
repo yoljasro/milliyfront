@@ -76,21 +76,22 @@ export const Fatest: React.FC = () => {
 
   const getCartQuantity = (cardId: number) => cart[cardId]?.quantity || 0;
 
-  const handleOrderNow = () => {
-    const selectedItems = Object.entries(cart)
-      .filter(([_, { quantity }]) => quantity > 0)
-      .reduce((acc, [id, item]) => {
-        acc[id] = item;
-        return acc;
-      }, {} as { [key: number]: CartItem });
+const handleOrderNow = () => {
+  const selectedItems = Object.entries(cart)
+    // .filter(([_, { quantity }]) => quantity > 0)
+    .reduce((acc, [id, item]) => {
+      acc[parseInt(id)] = item; 
+       // id ni parseInt orqali raqamga aylantiramiz
+      return acc;
+    }, {} as { [key: number]: CartItem });
 
-    if (Object.keys(selectedItems).length > 0) {
-      router.push({
-        pathname: '/order',
-        query: { items: JSON.stringify(selectedItems) }
-      });
-    }
-  };
+  if (Object.keys(selectedItems).length > 0) {
+    router.push({
+      pathname: '/order',
+      query: { items: JSON.stringify(selectedItems) }
+    });
+  }
+};
 
   // Check if there are any items in the cart to show the Order Now button
   const hasItemsInCart = Object.values(cart).some(item => item.quantity > 0);

@@ -22,13 +22,20 @@ const Navbar: React.FC = () => {
   const [level, setLevel] = useState<string>('Новичок'); // Default level
 
   useEffect(() => {
-    // Telegram WebApp yuklanganligini tekshiramiz
     const tg = window.Telegram?.WebApp;
     if (tg?.initDataUnsafe?.user?.username) {
       setUsername(tg.initDataUnsafe.user.username);
+      
+      // Username asosida level o'zgartirish (misol uchun)
+      if (tg.initDataUnsafe.user.username === 'admin') {
+        setLevel('Admin');
+      } else {
+        setLevel('User');
+      }
     }
-    tg?.ready(); // Telegram WebApp API-ni ishga tushiramiz
+    tg?.ready();
   }, []);
+  
 
   return (
     <div>

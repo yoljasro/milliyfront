@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './index.module.sass';
-import Link from 'next/link';
 
 const Balls: React.FC = () => {
   const handleOrderClick = () => {

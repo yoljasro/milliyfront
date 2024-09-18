@@ -1,12 +1,7 @@
 import Head from "next/head";
 import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
-import Navbar from "@/components/Navbar";
 import CarouselCards from "@/components/CarouselCards";
-import Balls from "@/components/Balls";
-import Products from "@/components/Products";
-import Food from "@/components/Foods";
-import { Menu } from "@/components/Menu";
 import { Fatest } from "@/components/Fatest";
 import { Popular } from "@/components/Popular";
 

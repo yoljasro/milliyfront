@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import styles from './index.module.sass';
 import Image from 'next/image';
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 

@@ -43,10 +43,39 @@ const FavoritePage: React.FC = () => {
   return (
     <div className={styles.favorite}>
       <h1>Sevimli kartalar</h1>
+
+      {/* Barcha itemlar */}
+      <h2>Barcha kartalar</h2>
       <div className={styles.favorite__cards}>
         {allItems.map((item) => (
           <div key={item.id} className={styles.favorite__card}>
             <Image src={item.imgUrl} alt="favorite item" width={270} height={122} layout="responsive" />
+            <div className={styles.favorite__icon}>
+              <AiFillHeart size={24} color="red" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Sevimli itemlar */}
+      <h2>Sevimli kartalar</h2>
+      <div className={styles.favorite__cards}>
+        {favoriteItems.map((item) => (
+          <div key={item.id} className={styles.favorite__card}>
+            <Image src={item.imgUrl} alt="favorite item" width={270} height={122} layout="responsive" />
+            <div className={styles.favorite__icon}>
+              <AiFillHeart size={24} color="red" />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Fastest bo'limidan itemlar */}
+      <h2>Tezkor kartalar</h2>
+      <div className={styles.favorite__cards}>
+        {fastestItems.map((item) => (
+          <div key={item.id} className={styles.favorite__card}>
+            <Image src={item.imgUrl} alt="fastest item" width={270} height={122} layout="responsive" />
             <div className={styles.favorite__icon}>
               <AiFillHeart size={24} color="red" />
             </div>

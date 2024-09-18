@@ -61,7 +61,7 @@ const OrderPage: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://milliy.kardise.com/orders', {
+      const response = await fetch('https://ff67-213-230-78-25.ngrok-free.app/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

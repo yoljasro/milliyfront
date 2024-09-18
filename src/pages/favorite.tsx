@@ -22,14 +22,14 @@ const FavoritePage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://milliy.kardise.com/products');
+        const response = await fetch('https://ff67-213-230-78-25.ngrok-free.app/products');
         const data = await response.json();
 
         // Map the fetched data to the productDetails format
         const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
           acc[product._id] = {
             ...product,
-            image: `http://milliy.kardise.com${product.image}`, // Full URL
+            image: `https://ff67-213-230-78-25.ngrok-free.app/${product.image}`, // Full URL
           };
           return acc;
         }, {});

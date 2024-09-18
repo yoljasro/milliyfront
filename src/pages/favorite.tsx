@@ -9,12 +9,12 @@ interface Product {
   image: string; // Image URL
 }
 
-interface FavoriteItem {
-  id: string;
-  imgUrl: string;
-  title: string;
-  desc: string;
-}
+// interface FavoriteItem {
+//   id: string;
+//   imgUrl: string;
+//   title: string;
+//   desc: string;
+// }
 
 const FavoritePage: React.FC = () => {
   const [favoriteItems, setFavoriteItems] = useState<Product[]>([]);

@@ -12,13 +12,13 @@ interface CardProps {
   getCartQuantity: (id: number) => number; // Cartdagi miqdorni olish
 }
 
-const Card: React.FC<CardProps> = ({ id, imgUrl, onFavorite, isFavorited, addToCart, getCartQuantity }) => {
-  const [showCounter, setShowCounter] = useState(false);
+const Card: React.FC<CardProps> = ({ id, imgUrl, onFavorite, isFavorited, }) => {
+  // const [showCounter, setShowCounter] = useState(false);
 
-  const handleAddToCart = () => {
-    addToCart(id);
-    setShowCounter(true);
-  };
+  // const handleAddToCart = () => {
+  //   addToCart(id);
+  //   setShowCounter(true);
+  // };
 
   return (
     <div className={styles.popular__card}>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/favorite.module.sass';
 import Image from 'next/image';
-import { AiFillHeart } from 'react-icons/ai';
+import { AiFillHeart } from 'react-icons/ai'; 
 
 interface Product {
-  _id: string; // Product ID
+  _id: string; // Product ID 
   title: string;
   image: string; // Image URL
 }

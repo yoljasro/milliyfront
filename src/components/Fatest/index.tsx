@@ -26,25 +26,38 @@ const Fatest: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://ff67-213-230-78-25.ngrok-free.app/products');
-        const data = await response.json();
-
-        const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
-          acc[product._id] = {
-            ...product,
-            image: `https://ff67-213-230-78-25.ngrok-free.app/${product.image}`,
-          };
-          return acc;
-        }, {});
-
-        setProductDetails(productsMap);
+        const response = await fetch('https://milliyadmin.uz/products');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+    
+          const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
+            acc[product._id] = {
+              ...product,
+              image: `https://milliyadmin.uz${product.image.replace(/\\/g, '/')}`, // Corrected URL
+            };
+            return acc;
+          }, {});
+    
+          setProductDetails(productsMap);
+        } else {
+          const text = await response.text();
+          console.error('Expected JSON response but got:', text);
+          throw new Error('Expected JSON response but got something else.');
+        }
       } catch (error) {
         console.error('Failed to fetch products:', error);
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favoriteItems');

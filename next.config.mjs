@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images:{
-    domains: ['milliy.kardise.com']
+    domains: ['milliyadmin.uz' , 'ff67-213-230-78-25.ngrok-free.app' , 'localhost' ]
   }
 };
 

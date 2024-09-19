@@ -1,0 +1,85 @@
+.searchPage
+  padding: 20px
+  text-align: center
+
+  .searchBox
+    display: flex
+    justify-content: center
+    margin-bottom: 20px
+
+    .searchInput
+      width: 70%
+      padding: 10px
+      font-size: 1.2em
+      border-radius: 5px
+      border: 1px solid #ddd
+      transition: all 0.3s ease
+
+      &:focus
+        outline: none
+        border-color: #333
+
+    .searchButton
+      background-color: #333
+      color: #fff
+      padding: 10px 20px
+      border: none
+      cursor: pointer
+      transition: background-color 0.3s ease
+
+      &:hover
+        background-color: #555
+
+  .results
+    margin-top: 20px
+
+    h3
+      font-size: 1.5em
+      margin-bottom: 20px
+      color: #444
+
+    .products
+      display: flex
+      flex-wrap: wrap
+      justify-content: center
+
+      .productCard
+        background-color: #fff
+        border-radius: 10px
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+        padding: 15px
+        margin: 10px
+        width: 250px
+        text-align: center
+        transition: transform 0.3s ease, box-shadow 0.3s ease
+
+        &:hover
+          transform: translateY(-10px)
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2)
+
+        .productImage
+          max-width: 100%
+          height: auto
+          border-radius: 10px
+
+        h4
+          font-size: 1.2em
+          margin: 10px 0
+
+        p
+          font-size: 1em
+          color: #666
+
+  .noResults
+    margin-top: 20px
+
+    h3
+      font-size: 1.5em
+      color: #ff4d4d
+
+  .recommended
+    margin-top: 20px
+
+    h3
+      font-size: 1.5em
+      margin-bottom: 20px

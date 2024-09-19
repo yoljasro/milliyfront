@@ -15,27 +15,38 @@
     justify-content: center
     align-content: center
     align-items: center
-    gap: 38px
+    gap: 45px
     width: 100%
-    max-width: 342px
+    max-width: 382px
     height: 72px
     border-radius: 8px
     padding: 12px 24px 18px 24px
     border: 1px solid #A4A5B080
-    background: #E1E1E2  
+    background: #E1E1E2
 
   &__items
-    display: flex   
-    flex-direction: column
-    gap: 8px
-    font-family: rubik-bold
-    font-size: 10px
-    cursor: pointer
+  display: flex
+  flex-direction: column
+  gap: 8px
+  font-family: rubik-bold
+  font-size: 10px
+  cursor: pointer
+
+  &.heart
+    img
+      position: relative
+      left: 30px // heart.svg uchun left 10px o'rnatish
+
 
   &__titleone
     // padding-right: 15px
     position: relative
     right: 5px
+
+  &__titlelast
+    position: relative
+    right: 5px
+    color: #0B0C17  
 
   &__title
     color: #0B0C17
@@ -52,6 +63,9 @@
   // Aktiv menyu rasm uchun rang
   .activeImage
     filter: invert(39%) sepia(100%) saturate(3793%) hue-rotate(350deg) brightness(101%) contrast(101%)
+  .activeImageLast
+    position: relative
+    left: 20px
 
   .activeText
     color: #F83B01

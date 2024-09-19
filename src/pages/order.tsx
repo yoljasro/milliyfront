@@ -61,7 +61,7 @@ const OrderPage: React.FC = () => {
     };
 
     try {
-      const response = await fetch('https://ff67-213-230-78-25.ngrok-free.app/orders', {
+      const response = await fetch('https://milliyadmin.uz/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const OrderPage: React.FC = () => {
   return (
     <div className={styles.orderPage}>
       <div className={styles.orderItems}>
-        <h2>Order Details</h2>
+        <h2 className={styles.name}>Order Details</h2>
         {Object.entries(cartItems).map(([id, item]) => (
           <div key={id} className={styles.orderItem}>
             <div className={styles.orderItemImage}>

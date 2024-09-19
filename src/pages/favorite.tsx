@@ -4,17 +4,11 @@ import Image from 'next/image';
 import { AiFillHeart } from 'react-icons/ai'; 
 
 interface Product {
-  _id: string; // Product ID 
+  _id: string;
   title: string;
-  image: string; // Image URL
+  image: string; 
+  price: number;
 }
-
-// interface FavoriteItem {
-//   id: string;
-//   imgUrl: string;
-//   title: string;
-//   desc: string;
-// }
 
 const FavoritePage: React.FC = () => {
   const [favoriteItems, setFavoriteItems] = useState<Product[]>([]);
@@ -22,26 +16,23 @@ const FavoritePage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://ff67-213-230-78-25.ngrok-free.app/products');
+        const response = await fetch('https://milliyadmin.uz/products');
         const data = await response.json();
-
-        // Map the fetched data to the productDetails format
+    
         const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
+          const cleanedImagePath = product.image.replace(/\\/g, '/').replace(/^\//, '');
           acc[product._id] = {
             ...product,
-            image: `https://ff67-213-230-78-25.ngrok-free.app/${product.image}`, // Full URL
+            image: `https://milliyadmin.uz/${cleanedImagePath}`,
           };
           return acc;
         }, {});
-
-        // Retrieve favorite IDs from localStorage
+    
         const storedFavorites = localStorage.getItem('favoriteItems');
         if (storedFavorites) {
           const favoriteIds = JSON.parse(storedFavorites);
-
-          // Filter the favorite products
           const filteredFavorites = favoriteIds.map((id: string) => productsMap[id]).filter((product: Product) => product);
-
+    
           setFavoriteItems(filteredFavorites);
         }
       } catch (error) {
@@ -55,8 +46,6 @@ const FavoritePage: React.FC = () => {
   return (
     <div className={styles.favorite}>
       <h1>Любимые карты</h1>
-
-      {/* Favorite items */}
       <div className={styles.favorite__cards}>
         {favoriteItems.map((item) => (
           <div key={item._id} className={styles.favorite__card}>
@@ -65,8 +54,7 @@ const FavoritePage: React.FC = () => {
               <AiFillHeart size={24} color="red" />
             </div>
             <p>{item.title}</p>
-            {/* Add description if needed */}
-            <p>Product Description</p>
+            <p>{item.price} сум</p>
           </div>
         ))}
       </div>

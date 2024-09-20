@@ -49,7 +49,7 @@ const FavoritePage: React.FC = () => {
       <div className={styles.favorite__cards}>
         {favoriteItems.map((item) => (
           <div key={item._id} className={styles.favorite__card}>
-            <Image src={item.image} alt="favorite item" width={270} height={122} layout="responsive" />
+            <Image src={item.image}  alt="favorite item" width={270} height={182} />
             <div className={styles.favorite__icon}>
               <AiFillHeart size={24} color="red" />
             </div>

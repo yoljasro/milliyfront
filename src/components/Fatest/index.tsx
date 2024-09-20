@@ -151,7 +151,7 @@ const Fatest: React.FC = () => {
               alt={productDetails[cardId].title}
               width={270}
               height={122}
-              layout="responsive"
+              // layout="responsive"
             />
             <p className={styles.fatest__title}>{productDetails[cardId].title}</p>
             <p className={styles.fatest__price}>{productDetails[cardId].price} UZS</p>

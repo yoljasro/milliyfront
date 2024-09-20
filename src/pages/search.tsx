@@ -64,8 +64,16 @@ const SearchPage: React.FC = () => {
       {query && filteredProducts.length > 0 ? (
         <div className={styles.results}>
           <h3>Search Results for {query}:</h3>
-          {/* Fatest componentiga filteredProducts ni props orqali yuborish */}
-          <Fatest products={filteredProducts} />
+          <div className={styles.products}>
+            {/* Mahsulotlarni qidirib topish */}
+            {filteredProducts.map((product) => (
+              <div key={product._id} className={styles.productCard}>
+                <img src={product.image} alt={product.title} className={styles.productImage} />
+                <h4>{product.title}</h4>
+                <p>{product.price} UZS</p>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
         query && (
@@ -78,8 +86,8 @@ const SearchPage: React.FC = () => {
       {!query && (
         <div className={styles.recommended}>
           <h3>Recommended Products</h3>
-          {/* Fatest komponentini render qilish */}
-          <Fatest products={allProducts} />
+          {/* Fatest komponenti orqali barcha mahsulotlarni chiqarish */}
+          <Fatest />
         </div>
       )}
     </div>

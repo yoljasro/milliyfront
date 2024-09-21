@@ -97,7 +97,7 @@ const OrderPage: React.FC = () => {
 
       setShowSuccessAlert(true);
 
-      // Tekshiruvlar qo'shilmoqda
+      // Telegram bot oynasini yopish
       if (window.Telegram && window.Telegram.WebApp) {
         const webAppClose = window.Telegram.WebApp.close;
         if (typeof webAppClose === 'function') {
@@ -116,18 +116,26 @@ const OrderPage: React.FC = () => {
   const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
     const telegramMessage = {
       chat_id: '1847596793',
-      text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${orderData.products
-        .map(item => item.productName)
-        .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
+      text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar:\n${orderData.products
+        .map(item => `${item.productName} - ${item.quantity} ta (${totalPrice} UZS)`)
+        .join('\n')}\n\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: ${orderData.orderStatus}`,
     };
 
-    await fetch('https://api.telegram.org/bot6837472952:6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(telegramMessage),
-    });
+    try {
+      const response = await fetch('https://api.telegram.org/bot6837472952:6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(telegramMessage),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message to Telegram');
+      }
+    } catch (error) {
+      console.error('Error sending message to Telegram:', error);
+    }
   };
 
   return (

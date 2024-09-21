@@ -19,21 +19,21 @@ const CarouselCards: React.FC = () => {
     centerPadding: "0", // Keyingi karta ko'rinmasligi uchun
   };
 
-  const handleCardClick = (cardId: number) => {
-    const url = `https://t.me/unicornapp?card=${cardId}`;
-    window.open(url, "_blank");
-  };
+  // const handleCardClick = (cardId: number) => {
+  //   const url = `https://t.me/unicornapp?card=${cardId}`;
+  //   window.open(url, "_blank");
+  // };
 
   return (
     <div className={styles.carouselContainer}>
       <Slider {...settings}>
-        <div className={styles.card} onClick={() => handleCardClick(1)} >
+        <div className={styles.card}  >
         </div>
-        <div className={styles.cardtwo} onClick={() => handleCardClick(2)} >
+        <div className={styles.cardtwo}  >
         </div>
-        <div className={styles.cardthree} onClick={() => handleCardClick(3)} >
+        <div className={styles.cardthree}  >
         </div>
-        <div className={styles.cardfour} onClick={() => handleCardClick(4)} >
+        <div className={styles.cardfour} >
         </div>
       </Slider>
     </div>

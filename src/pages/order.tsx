@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styles from '../styles/order.module.sass';
+import { Snackbar, Alert } from '@mui/material';
 
 interface CartItem {
   quantity: number;
@@ -9,7 +10,7 @@ interface CartItem {
     image: string;
     title: string;
     price: string;
-    description: string;  // Yangi description qo'shildi
+    description: string; // Yangi description qo'shildi
   };
 }
 
@@ -34,7 +35,7 @@ const OrderPage: React.FC = () => {
   const [deliveryType, setDeliveryType] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
-  const [showSuccessAlert, setShowSuccessAlert] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
     if (query.items) {
@@ -62,7 +63,7 @@ const OrderPage: React.FC = () => {
     const totalPrice = calculateTotalPrice();
 
     if (isNaN(totalPrice)) {
-      alert('Invalid total price.');
+      setAlert({ open: true, message: 'Invalid total price.', severity: 'error' });
       return;
     }
 
@@ -94,8 +95,7 @@ const OrderPage: React.FC = () => {
       }
 
       await sendOrderToTelegram(orderData, totalPrice);
-
-      setShowSuccessAlert(true);
+      setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
 
       // Telegram bot oynasini yopish
       if (window.Telegram && window.Telegram.WebApp) {
@@ -109,7 +109,7 @@ const OrderPage: React.FC = () => {
 
     } catch (error) {
       console.error('Failed to place order:', error);
-      alert('Failed to place order. Please try again.');
+      setAlert({ open: true, message: 'Failed to place order. Please try again.', severity: 'error' });
     }
   };
 
@@ -117,12 +117,12 @@ const OrderPage: React.FC = () => {
     const telegramMessage = {
       chat_id: '1847596793',
       text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar:\n${orderData.products
-        .map(item => `${item.productName} - ${item.quantity} ta (${totalPrice} UZS)`)
+        .map(item => `${item.productName} - ${item.quantity} ta`)
         .join('\n')}\n\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: ${orderData.orderStatus}`,
     };
 
     try {
-      const response = await fetch('https://api.telegram.org/bot6837472952:6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
+      const response = await fetch('https://api.telegram.org/bot6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,6 +136,10 @@ const OrderPage: React.FC = () => {
     } catch (error) {
       console.error('Error sending message to Telegram:', error);
     }
+  };
+
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
   };
 
   return (
@@ -213,7 +217,11 @@ const OrderPage: React.FC = () => {
         <button className={styles.submitButton} onClick={handleOrder}>Place Order</button>
       </div>
 
-      {showSuccessAlert && <div className={styles.successAlert}>Your order has been placed successfully!</div>}
+      <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity={alert.severity}>
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

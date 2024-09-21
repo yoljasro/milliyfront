@@ -79,22 +79,23 @@ export const Menu: React.FC = () => {
         </Link>
 
         <Link href={'/favorite'}>
-  <div
-    className={`${styles.menu__items} ${styles.heart} ${activeMenu === 'favorites' ? styles.active : ''}`}
-    onClick={() => setActiveMenu('favorites')}
-  >
-    <Image
-      src={'/assets/img/heart.svg'}
-      alt='favorites'
-      width={24}
-      height={24}
-      className={activeMenu === 'favorites' ? styles.activeImage : ''}
-    />
-    <p className={`${styles.menu__title} ${activeMenu === 'favorites' ? styles.activeText : ''}`}>
-      Любимый
-    </p>
-  </div>
-</Link>
+          <div
+            className={`${styles.menu__items} ${styles.heart} ${activeMenu === 'favorites' ? styles.active : ''}`}
+            onClick={() => setActiveMenu('favorites')}
+          >
+            <Image
+              src={'/assets/img/heart.svg'}
+              alt='favorites'
+              width={24}
+              height={24}
+              className={activeMenu === 'favorites' ? styles.activeImage : ''}
+              style={{ position: 'relative', left: "10px" }} // 20px o'ngga joylashtirish
+            />
+            <p className={`${styles.menu__title} ${activeMenu === 'favorites' ? styles.activeText : ''}`}>
+              Любимый
+            </p>
+          </div>
+        </Link>
       </div>
     </div>
   );

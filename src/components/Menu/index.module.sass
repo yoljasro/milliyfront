@@ -25,21 +25,18 @@
     background: #E1E1E2
 
   &__items
-  display: flex
-  flex-direction: column
-  gap: 8px
-  font-family: rubik-bold
-  font-size: 10px
-  cursor: pointer
+    display: flex
+    flex-direction: column
+    gap: 8px
+    font-family: rubik-bold
+    font-size: 10px
+    cursor: pointer
 
-  &.heart
-    img
-      position: relative
-      left: 30px // heart.svg uchun left 10px o'rnatish
-
+    &.heart
+      position: relative // Heart rasm uchun pozitsiya berish
+      right: 20px // Heart rasmni 20px o'ngga surish
 
   &__titleone
-    // padding-right: 15px
     position: relative
     right: 5px
 
@@ -63,9 +60,6 @@
   // Aktiv menyu rasm uchun rang
   .activeImage
     filter: invert(39%) sepia(100%) saturate(3793%) hue-rotate(350deg) brightness(101%) contrast(101%)
-  .activeImageLast
-    position: relative
-    left: 20px
 
   .activeText
     color: #F83B01

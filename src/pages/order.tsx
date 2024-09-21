@@ -121,7 +121,7 @@ const OrderPage: React.FC = () => {
         .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
     };
 
-    await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
+    await fetch('https://api.telegram.org/bot6837472952:6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

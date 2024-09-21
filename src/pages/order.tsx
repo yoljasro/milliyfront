@@ -63,7 +63,7 @@ const OrderPage: React.FC = () => {
       phone: deliveryType === 'доставка' ? phone : '',
       totalPrice: totalPrice,
       paymentStatus: deliveryType === 'самовывоз' ? 'pending' : 'unpaid',
-      orderStatus: 'pending',
+      orderStatus: 'pending', // Boshlang'ich order statusi
     };
 
     try {
@@ -79,21 +79,23 @@ const OrderPage: React.FC = () => {
         throw new Error('Network response was not ok.');
       }
 
-      // Telegram botga buyurtmani yuborish
-      const telegramMessage = {
-        chat_id: '1847596793',  // Buni o'z chat ID'ingizga almashtiring
-        text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${Object.values(cartItems)
-          .map(item => item.product.title)
-          .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
-      };
+      // Telegram botga buyurtma haqida ma'lumot yuborish
+      if (window.Telegram && window.Telegram.WebApp) {
+        const telegramMessage = {
+          chat_id: '1847596793',  // Buni o'z chat ID'ingizga almashtiring
+          text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${Object.values(cartItems)
+            .map(item => item.product.title)
+            .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
+        };
 
-      await fetch(`https://api.telegram.org/bot6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(telegramMessage),
-      });
+        await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(telegramMessage),
+        });
+      }
 
       // Buyurtma muvaffaqiyatli qabul qilingandan so‘ng
       setShowSuccessAlert(true);
@@ -101,15 +103,52 @@ const OrderPage: React.FC = () => {
       // Telegram WebApp-ni yopish
       if (window.Telegram && window.Telegram.WebApp) {
         setTimeout(() => {
-          if (window.Telegram.WebApp.close) {
-            window.Telegram.WebApp.close();  // WebApp oynasini yopish
-          }
+          window.Telegram.WebApp.close;  // WebApp oynasini yopish
         }, 1500);  // 1.5 soniyadan so'ng oynani yopish
       }
       
     } catch (error) {
       console.error('Failed to place order:', error);
       alert('Failed to place order. Please try again.');
+    }
+  };
+
+  // Admin panelda orderStatus o'zgartirilganda, Telegram botga xabar yuborish
+  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const response = await fetch(`https://milliyadmin.uz/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderStatus: newStatus }),
+      });
+
+      if (response.ok) {
+        // Telegram botga order yangilanganini yuborish
+        await notifyTelegramBot(orderId, newStatus);
+      }
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+    }
+  };
+
+  const notifyTelegramBot = async (orderId: string, newStatus: string) => {
+    const telegramMessage = {
+      chat_id: '1847596793',  // O'zingizning chat ID'ingizni kiriting
+      text: `Buyurtma ID: ${orderId} yangilandi.\nYangi buyurtma statusi: ${newStatus}`,
+    };
+
+    try {
+      await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(telegramMessage),
+      });
+    } catch (error) {
+      console.error('Failed to notify Telegram:', error);
     }
   };
 
@@ -175,7 +214,7 @@ const OrderPage: React.FC = () => {
               />
             </label>
           </div>
-        )}
+        )}  
       </div>
 
       <div className={styles.orderActions}>

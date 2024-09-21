@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/favorite.module.sass';
 import Image from 'next/image';
 import { AiFillHeart } from 'react-icons/ai'; 
-import { useSpring, animated } from 'react-spring'; // react-spring import
 
 interface Product {
   _id: string;
@@ -45,10 +44,6 @@ const FavoritePage: React.FC = () => {
   }, []);
 
   // Animatsiya uchun
-  const emptyAnimation = useSpring({
-    opacity: favoriteItems.length === 0 ? 1 : 0,
-    transform: favoriteItems.length === 0 ? 'translateY(0)' : 'translateY(-20px)',
-  });
 
   return (
     <div className={styles.favorite}>
@@ -66,9 +61,9 @@ const FavoritePage: React.FC = () => {
         ))}
       </div>
       {/* Bo'sh xabarnoma */}
-      <animated.div style={emptyAnimation} className={styles.empty}>
+      <div  className={styles.empty}>
         <p>У вас нет любимых продуктов</p>
-      </animated.div>
+      </div>
     </div>
   );
 };

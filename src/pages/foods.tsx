@@ -1,6 +1,7 @@
+import { Categories } from 'components/Categories';
+import { Fooders } from 'components/Fooders';
 import React from 'react';
-import { Categories } from '@/components/Categories';
-import { Fooders } from '@/components/Fooders';
+// import { Categories } from '@/';
 // import styles from './index.module.css';
 
 

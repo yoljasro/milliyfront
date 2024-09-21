@@ -1,9 +1,9 @@
 import Head from "next/head";
 import localFont from "next/font/local";
 import styles from "@/styles/Home.module.css";
-import CarouselCards from "@/components/CarouselCards";
-import  Fatest  from "@/components/Fatest";
-import { Popular } from "@/components/Popular";
+import CarouselCards from "components/CarouselCards";
+import  Fatest  from "components/Fatest";
+import { Popular } from "components/Popular";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

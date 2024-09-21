@@ -25,6 +25,11 @@ const OrderPage: React.FC = () => {
     if (query.items) {
       setCartItems(JSON.parse(query.items as string));
     }
+
+    // Telegram WebApp API ni tayyorlash
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+    }
   }, [query.items]);
 
   const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +63,7 @@ const OrderPage: React.FC = () => {
       phone: deliveryType === 'доставка' ? phone : '',
       totalPrice: totalPrice,
       paymentStatus: deliveryType === 'самовывоз' ? 'pending' : 'unpaid',
+      orderStatus: 'pending',
     };
 
     try {
@@ -73,7 +79,34 @@ const OrderPage: React.FC = () => {
         throw new Error('Network response was not ok.');
       }
 
+      // Telegram botga buyurtmani yuborish
+      const telegramMessage = {
+        chat_id: '1847596793',  // Buni o'z chat ID'ingizga almashtiring
+        text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${Object.values(cartItems)
+          .map(item => item.product.title)
+          .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
+      };
+
+      await fetch(`https://api.telegram.org/bot6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(telegramMessage),
+      });
+
+      // Buyurtma muvaffaqiyatli qabul qilingandan so‘ng
       setShowSuccessAlert(true);
+
+      // Telegram WebApp-ni yopish
+      if (window.Telegram && window.Telegram.WebApp) {
+        setTimeout(() => {
+          if (window.Telegram.WebApp.close) {
+            window.Telegram.WebApp.close();  // WebApp oynasini yopish
+          }
+        }, 1500);  // 1.5 soniyadan so'ng oynani yopish
+      }
+      
     } catch (error) {
       console.error('Failed to place order:', error);
       alert('Failed to place order. Please try again.');

@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react';
 import styles from './index.module.sass';
 
 // Telegram Web App orqali username olish uchun window obyektini declare qilamiz
-declare global {
-  interface Window {
-    Telegram: {
-      WebApp: {
-        initDataUnsafe: {
-          user?: {
-            username?: string;
-          };
-        };
-        ready: () => void;
-      };
-    };
-  }
-}
+// declare global {
+//   interface Window {
+//     Telegram: {
+//       WebApp: {
+//         initDataUnsafe: {
+//           user?: {
+//             username?: string;
+//           };
+//         };
+//         ready: () => void;
+//       };
+//     };
+//   }
+// }
 
 const Navbar: React.FC = () => {
   const [username, setUsername] = useState<string>('<>JASURBEK<\>');

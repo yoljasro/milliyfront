@@ -61,7 +61,7 @@ const FavoritePage: React.FC = () => {
               <AiFillHeart size={24} color="red" />
             </div>
             <p>{item.title}</p>
-            <p>{item.price} сум</p>
+            <p>{item.price} сум</p> 
           </div>
         ))}
       </div>

@@ -26,7 +26,7 @@ const FavoritePage: React.FC = () => {
             image: `https://milliyadmin.uz/${cleanedImagePath}`,
           };
           return acc;
-        }, {});
+        }, {}); 
     
         const storedFavorites = localStorage.getItem('favoriteItems');
         if (storedFavorites) {

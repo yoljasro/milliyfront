@@ -4,8 +4,6 @@
   align-items: center
   flex-direction: column
   padding: 40px
-  // background-color: #f4f6f8  
-  // min-height: 100vh
   font-family: Arial, sans-serif
 
 .name
@@ -17,12 +15,15 @@
   flex-direction: column
   gap: 20px
   margin-top: 20px
-  max-width: 600px
-  width: 100%
+  max-width: 450px
+  // height: 200px
+
+.img
+  object-fit: cover
 
 .orderItem
   display: flex
-  gap: 20px
+  flex-direction: column
   border: 2px solid #e0e0e0
   border-radius: 10px
   padding: 15px
@@ -36,33 +37,29 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
 
 .orderItemImage
-  flex-shrink: 0
-
-.orderItemImage img
-  border-radius: 8px
-  object-fit: cover
-  width: 100%
-  height: auto
+  margin-bottom: 15px
 
 .orderItemDetails
-  flex: 1
   display: flex
   flex-direction: column
-  justify-content: center
+  gap: 5px
 
   h3
     font-size: 18px
     font-weight: 600
     color: #333
-
-  p
-    font-size: 14px
-    color: #666
+    text-align: center
 
   .price
     font-size: 16px
-    color: #333
     font-weight: 700
+    color: #007bff
+    text-align: center
+
+  .description
+    font-size: 14px
+    color: #666
+    text-align: center
 
 .deliveryOptions
   margin-top: 30px
@@ -72,12 +69,6 @@
   padding: 20px
   border-radius: 10px
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
-
-  h2
-    font-size: 22px
-    font-weight: 600
-    color: #333
-    text-align: center
 
   .deliveryChoices
     display: flex
@@ -93,59 +84,62 @@
       gap: 10px
       font-size: 20px
       cursor: pointer
-      transition: color 0.3s ease
       color: #555
 
       &:hover
         color: #007bff
 
-      input[type='radio']
-        accent-color: #007bff
-
 .deliveryDetails
-  margin-top: 20px
   display: flex
-  flex-direction: column
-  gap: 15px
+  flex-wrap: wrap
+  gap: 10px
+  margin-top: 20px
 
   label
+    flex: 1 1 48%
+    display: flex
+    flex-direction: column
+    gap: 5px
     font-size: 16px
-    color: #333
+    color: #555
 
     input
-      width: 100%
       padding: 10px
+      font-size: 16px
       border: 1px solid #ccc
       border-radius: 5px
-      font-size: 14px
+      transition: border-color 0.3s ease
 
-.orderActions
-  display: flex
-  justify-content: center
-  margin-top: 20px
+      &:focus
+        border-color: #007bff
+        outline: none
+
+      &:hover
+        border-color: #007bff
 
 .submitButton
   padding: 15px 20px
-  border: none
-  border-radius: 5px
-  font-size: 18px
-  font-weight: 600
-  cursor: pointer
-  transition: background-color 0.3s ease, transform 0.2s ease
   background-color: #007bff
   color: #fff
+  border: none
+  border-radius: 8px
+  font-size: 18px
+  font-weight: bold
+  cursor: pointer
+  margin-top: 30px
+  width: 100%
+  max-width: 200px
+  transition: background-color 0.3s ease
 
   &:hover
     background-color: #0056b3
-    transform: scale(1.05)
-
-  &:active
-    background-color: #004080
 
 .successAlert
-  margin-top: 20px
-  padding: 15px
   background-color: #28a745
   color: #fff
-  border-radius: 5px
+  padding: 20px
+  border-radius: 8px
+  font-size: 16px
+  font-weight: bold
   text-align: center
+  margin-top: 30px

@@ -6,10 +6,25 @@ import styles from '../styles/order.module.sass';
 interface CartItem {
   quantity: number;
   product: {
-    img: string;
+    image: string;
     title: string;
     price: string;
+    description: string;  // Yangi description qo'shildi
   };
+}
+
+interface OrderData {
+  products: {
+    productId: string;
+    productName: string;
+    quantity: number;
+  }[];
+  deliveryType: string;
+  address: string;
+  phone: string;
+  totalPrice: number;
+  paymentStatus: string;
+  orderStatus: string;
 }
 
 const OrderPage: React.FC = () => {
@@ -26,7 +41,6 @@ const OrderPage: React.FC = () => {
       setCartItems(JSON.parse(query.items as string));
     }
 
-    // Telegram WebApp API ni tayyorlash
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
     }
@@ -37,14 +51,14 @@ const OrderPage: React.FC = () => {
     setDeliveryType(value);
   };
 
-  const handleOrder = async () => {
-    const calculateTotalPrice = () => {
-      return Object.values(cartItems).reduce((total, item) => {
-        const price = parseFloat(item.product.price);
-        return !isNaN(price) ? total + price * item.quantity : total;
-      }, 0);
-    };
+  const calculateTotalPrice = () => {
+    return Object.values(cartItems).reduce((total, item) => {
+      const price = parseFloat(item.product.price);
+      return !isNaN(price) ? total + price * item.quantity : total;
+    }, 0);
+  };
 
+  const handleOrder = async () => {
     const totalPrice = calculateTotalPrice();
 
     if (isNaN(totalPrice)) {
@@ -52,7 +66,7 @@ const OrderPage: React.FC = () => {
       return;
     }
 
-    const orderData = {
+    const orderData: OrderData = {
       products: Object.entries(cartItems).map(([cardId, item]) => ({
         productId: cardId,
         productName: item.product.title,
@@ -63,7 +77,7 @@ const OrderPage: React.FC = () => {
       phone: deliveryType === 'доставка' ? phone : '',
       totalPrice: totalPrice,
       paymentStatus: deliveryType === 'самовывоз' ? 'pending' : 'unpaid',
-      orderStatus: 'pending', // Boshlang'ich order statusi
+      orderStatus: 'pending',
     };
 
     try {
@@ -79,77 +93,41 @@ const OrderPage: React.FC = () => {
         throw new Error('Network response was not ok.');
       }
 
-      // Telegram botga buyurtma haqida ma'lumot yuborish
-      if (window.Telegram && window.Telegram.WebApp) {
-        const telegramMessage = {
-          chat_id: '1847596793',  // Buni o'z chat ID'ingizga almashtiring
-          text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${Object.values(cartItems)
-            .map(item => item.product.title)
-            .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
-        };
+      await sendOrderToTelegram(orderData, totalPrice);
 
-        await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(telegramMessage),
-        });
-      }
-
-      // Buyurtma muvaffaqiyatli qabul qilingandan so‘ng
       setShowSuccessAlert(true);
 
-      // Telegram WebApp-ni yopish
+      // Tekshiruvlar qo'shilmoqda
       if (window.Telegram && window.Telegram.WebApp) {
-        setTimeout(() => {
-          window.Telegram.WebApp.close;  // WebApp oynasini yopish
-        }, 1500);  // 1.5 soniyadan so'ng oynani yopish
+        const webAppClose = window.Telegram.WebApp.close;
+        if (typeof webAppClose === 'function') {
+          setTimeout(() => {
+            webAppClose();
+          }, 1500);
+        }
       }
-      
+
     } catch (error) {
       console.error('Failed to place order:', error);
       alert('Failed to place order. Please try again.');
     }
   };
 
-  // Admin panelda orderStatus o'zgartirilganda, Telegram botga xabar yuborish
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
-    try {
-      const response = await fetch(`https://milliyadmin.uz/orders/${orderId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ orderStatus: newStatus }),
-      });
-
-      if (response.ok) {
-        // Telegram botga order yangilanganini yuborish
-        await notifyTelegramBot(orderId, newStatus);
-      }
-    } catch (error) {
-      console.error('Failed to update order status:', error);
-    }
-  };
-
-  const notifyTelegramBot = async (orderId: string, newStatus: string) => {
+  const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
     const telegramMessage = {
-      chat_id: '1847596793',  // O'zingizning chat ID'ingizni kiriting
-      text: `Buyurtma ID: ${orderId} yangilandi.\nYangi buyurtma statusi: ${newStatus}`,
+      chat_id: '1847596793',
+      text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar: ${orderData.products
+        .map(item => item.productName)
+        .join(', ')}\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: pending`,
     };
 
-    try {
-      await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(telegramMessage),
-      });
-    } catch (error) {
-      console.error('Failed to notify Telegram:', error);
-    }
+    await fetch('https://api.telegram.org/bot6837472952:YOUR_BOT_TOKEN/sendMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(telegramMessage),
+    });
   };
 
   return (
@@ -159,11 +137,18 @@ const OrderPage: React.FC = () => {
         {Object.entries(cartItems).map(([id, item]) => (
           <div key={id} className={styles.orderItem}>
             <div className={styles.orderItemImage}>
-              <Image src={'/assets/img/foodlast.jpg'} alt={item.product.title} width={150} height={150} layout="intrinsic" />
+              <Image
+                src={item.product.image || '/fallback-image.jpg'}
+                alt="order item"
+                width={270}
+                height={182}
+                className={styles.img}
+              />
             </div>
             <div className={styles.orderItemDetails}>
               <h3>{item.product.title}</h3>
               <p className={styles.price}>{item.product.price} UZS</p>
+              <p className={styles.description}>{item.product.description}</p>
               <p>Quantity: {item.quantity}</p>
             </div>
           </div>
@@ -201,7 +186,6 @@ const OrderPage: React.FC = () => {
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                required
               />
             </label>
             <label>
@@ -210,22 +194,18 @@ const OrderPage: React.FC = () => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
               />
             </label>
           </div>
-        )}  
+        )}
       </div>
 
-      <div className={styles.orderActions}>
+      <div className={styles.orderSummary}>
+        <h2>Total Price: {calculateTotalPrice()} UZS</h2>
         <button className={styles.submitButton} onClick={handleOrder}>Place Order</button>
       </div>
 
-      {showSuccessAlert && (
-        <div className={styles.successAlert}>
-          <p>Order placed successfully!</p>
-        </div>
-      )}
+      {showSuccessAlert && <div className={styles.successAlert}>Your order has been placed successfully!</div>}
     </div>
   );
 };

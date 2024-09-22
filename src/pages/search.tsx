@@ -51,7 +51,7 @@ const SearchPage: React.FC = () => {
       <div className={styles.searchBox}>
         <input
           type="text"
-          placeholder="Search for products..."
+          placeholder="Поиск"
           value={query}
           onChange={handleSearch}
           className={styles.searchInput}
@@ -63,7 +63,7 @@ const SearchPage: React.FC = () => {
 
       {query && filteredProducts.length > 0 ? (
         <div className={styles.results}>
-          <h3>Search Results for {query}:</h3>
+          <h3>Поиск {query}:</h3>
           <div className={styles.products}>
             {/* Mahsulotlarni qidirib topish */}
             {filteredProducts.map((product) => (
@@ -78,14 +78,14 @@ const SearchPage: React.FC = () => {
       ) : (
         query && (
           <div className={styles.noResults}>
-            <h3>No results found for {query}</h3>
+            <h3>Результаты не найдены для {query}</h3>
           </div>
         )
       )}
 
       {!query && (
         <div className={styles.recommended}>
-          <h3>Recommended Products</h3>
+          <h3>Рекомендуемые продукты</h3>
           {/* Fatest komponenti orqali barcha mahsulotlarni chiqarish */}
           <Fatest />
         </div>

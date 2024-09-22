@@ -8,7 +8,7 @@ export const Fooders: React.FC = () => {
 
   return (
     <div className={styles.fooders}>
-       <p className={styles.fooders__title}>Все рестораны</p>   
+       <p className={styles.fooders__title}>Все товары</p>   
        <div className={styles.fooders__cards}>
        <div className={styles.fooders__card}>
     <Image className={styles.fooders__img} src={'/assets/img/bowl.png'} alt='fooders1' width={270} height={180} layout="responsive" />

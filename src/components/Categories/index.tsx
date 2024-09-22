@@ -8,7 +8,7 @@ export const Categories: React.FC = () => {
 
   return (
     <div className={styles.categories}>
-        <p className={styles.categories__title}>Restaurants</p>
+        <p className={styles.categories__title}>Рестораны</p>
       <div className={styles.categories__cont}>
        <div className={styles.categories__content}>
         <p>Категории</p>

@@ -161,14 +161,14 @@ const OrderPage: React.FC = () => {
               <h3>{item.product.title}</h3>
               <p className={styles.price}>{item.product.price} UZS</p>
               <p className={styles.description}>{item.product.description}</p>
-              <p>Quantity: {item.quantity}</p>
+              <p>Количество: {item.quantity}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className={styles.deliveryOptions}>
-        <h2>Delivery Options</h2>
+        <h2>Варианты доставки</h2>
         <div className={styles.deliveryChoices}>
           <label>
             <input
@@ -193,7 +193,7 @@ const OrderPage: React.FC = () => {
         {deliveryType === 'доставка' && (
           <div className={styles.deliveryDetails}>
             <label>
-              Address:
+            Адрес:
               <input
                 type="text"
                 value={address}
@@ -201,7 +201,7 @@ const OrderPage: React.FC = () => {
               />
             </label>
             <label>
-              Phone:
+            Телефон:
               <input
                 type="text"
                 value={phone}
@@ -213,7 +213,7 @@ const OrderPage: React.FC = () => {
       </div>
 
       <div className={styles.orderSummary}>
-        <h2>Total Price: {calculateTotalPrice()} UZS</h2>
+        <h2>Общая цена: {calculateTotalPrice()} UZS</h2>
         <button className={styles.submitButton} onClick={handleOrder}>Place Order</button>
       </div>
 

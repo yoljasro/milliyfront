@@ -9,7 +9,7 @@ const Foods: React.FC = () => {
     return (
         <div>
             <Categories/>
-            <Fooders/>
+            {/* <Fooders/> */}
         </div>
     );
 };

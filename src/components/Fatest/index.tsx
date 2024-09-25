@@ -7,7 +7,9 @@ import { useRouter } from 'next/router';
 interface Product {
   _id: string;
   title: string;
+  desc: string;
   price: number;
+  minute: string;
   image: string;
 }
 
@@ -154,10 +156,13 @@ const Fatest: React.FC = () => {
               // layout="responsive"
             />
             <p className={styles.fatest__title}>{productDetails[cardId].title}</p>
+            <div className={styles.fatest__desc}>
+            <p>{productDetails[cardId].desc}</p>
+            </div>
             <p className={styles.fatest__price}>{productDetails[cardId].price} UZS</p>
             <div className={styles.fatest__timer}>
               <Image alt='timer' src={'/assets/img/timer.svg'} width={16} height={16} />
-              <p>40-50min</p>
+              <p>{productDetails[cardId].minute} min</p>
             </div>
             <div className={styles.fatest__cardActions}>
               {getCartQuantity(cardId) === 0 ? (

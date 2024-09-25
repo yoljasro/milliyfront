@@ -77,8 +77,8 @@ const OrderPage: React.FC = () => {
       address: deliveryType === 'доставка' ? address : '',
       phone: deliveryType === 'доставка' ? phone : '',
       totalPrice: totalPrice,
-      paymentStatus: deliveryType === 'самовывоз' ? 'pending' : 'unpaid',
-      orderStatus: 'pending',
+      paymentStatus: deliveryType === 'самовывоз' ? 'Принял' : 'unpaid',
+      orderStatus: 'Принял',
     };
 
     try {
@@ -145,7 +145,7 @@ const OrderPage: React.FC = () => {
   return (
     <div className={styles.orderPage}>
       <div className={styles.orderItems}>
-        <h2 className={styles.name}>Order Details</h2>
+        <h2 className={styles.name}>Информация о заказе</h2>
         {Object.entries(cartItems).map(([id, item]) => (
           <div key={id} className={styles.orderItem}>
             <div className={styles.orderItemImage}>
@@ -214,7 +214,7 @@ const OrderPage: React.FC = () => {
 
       <div className={styles.orderSummary}>
         <h2>Общая цена: {calculateTotalPrice()} UZS</h2>
-        <button className={styles.submitButton} onClick={handleOrder}>Place Order</button>
+        <button className={styles.submitButton} onClick={handleOrder}>Разместить заказ</button>
       </div>
 
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -225,5 +225,5 @@ const OrderPage: React.FC = () => {
     </div>
   );
 };
-
+   
 export default OrderPage;

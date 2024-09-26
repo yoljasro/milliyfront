@@ -10,7 +10,7 @@ interface CartItem {
     image: string;
     title: string;
     price: string;
-    description: string; // Yangi description qo'shildi
+    description: string;
   };
 }
 
@@ -97,7 +97,6 @@ const OrderPage: React.FC = () => {
       await sendOrderToTelegram(orderData, totalPrice);
       setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
 
-      // Telegram bot oynasini yopish
       if (window.Telegram && window.Telegram.WebApp) {
         const webAppClose = window.Telegram.WebApp.close;
         if (typeof webAppClose === 'function') {
@@ -116,13 +115,13 @@ const OrderPage: React.FC = () => {
   const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
     const telegramMessage = {
       chat_id: '1847596793',
-      text: `Yangi buyurtma qabul qilindi:\n\nMahsulotlar:\n${orderData.products
-        .map(item => `${item.productName} - ${item.quantity} ta`)
-        .join('\n')}\n\nJami narx: ${totalPrice} UZS\nBuyurtma statusi: ${orderData.orderStatus}`,
+      text: `Получен новый заказ:\n\nТовары:\n${orderData.products
+        .map(item => `${item.productName} - ${item.quantity}`)
+        .join('\n')}\n\nОбщая стоимость: ${totalPrice} сум\nСтатус заказа: ${orderData.orderStatus}`,
     };
 
     try {
-      const response = await fetch('https://api.telegram.org/bot6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
+      const response = await fetch('https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,13 +151,13 @@ const OrderPage: React.FC = () => {
               <Image
                 src={item.product.image || '/fallback-image.jpg'}
                 alt="order item"
-                width={270}
-                height={182}
+                width={100}
+                height={100}
                 className={styles.img}
               />
             </div>
             <div className={styles.orderItemDetails}>
-              <h3>{item.product.title}</h3>
+              <h3 className={styles.title}>{item.product.title}</h3>
               <p className={styles.price}>{item.product.price} UZS</p>
               <p className={styles.description}>{item.product.description}</p>
               <p>Количество: {item.quantity}</p>
@@ -168,9 +167,9 @@ const OrderPage: React.FC = () => {
       </div>
 
       <div className={styles.deliveryOptions}>
-        <h2>Варианты доставки</h2>
+        <h2 className={styles.option}>Варианты доставки</h2>
         <div className={styles.deliveryChoices}>
-          <label>
+          <label className={`${styles.deliveryLabel} ${deliveryType === 'доставка' ? styles.active : ''}`}>
             <input
               type="radio"
               value="доставка"
@@ -179,7 +178,7 @@ const OrderPage: React.FC = () => {
             />
             Доставка
           </label>
-          <label>
+          <label className={`${styles.deliveryLabel} ${deliveryType === 'самовывоз' ? styles.active : ''}`}>
             <input
               type="radio"
               value="самовывоз"
@@ -193,7 +192,7 @@ const OrderPage: React.FC = () => {
         {deliveryType === 'доставка' && (
           <div className={styles.deliveryDetails}>
             <label>
-            Адрес:
+              Адрес:
               <input
                 type="text"
                 value={address}
@@ -201,7 +200,7 @@ const OrderPage: React.FC = () => {
               />
             </label>
             <label>
-            Телефон:
+              Телефон:
               <input
                 type="text"
                 value={phone}
@@ -225,5 +224,5 @@ const OrderPage: React.FC = () => {
     </div>
   );
 };
-   
+
 export default OrderPage;

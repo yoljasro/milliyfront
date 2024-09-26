@@ -1,12 +1,13 @@
 .orderPage
   display: flex
   justify-content: center
-  align-items: center
+  align-items: flex-start
   flex-direction: column
   padding: 40px
-  height: 100%
-  overflow-y: scroll
+  min-height: 100vh
+  overflow-y: auto
   font-family: Arial, sans-serif
+  margin-bottom: 50px
 
 .name
   text-align: center
@@ -18,15 +19,15 @@
   gap: 20px
   margin-top: 20px
   max-width: 450px
-  // height: 200px
 
 .img
   object-fit: cover
 
 .orderItem
   display: flex
-  flex-direction: column
-  border: 2px solid #e0e0e0
+  flex-direction: row
+  align-items: center
+  border: 2px solid green
   border-radius: 10px
   padding: 15px
   background-color: #ffffff
@@ -39,29 +40,26 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15)
 
 .orderItemImage
-  margin-bottom: 15px
+  margin-right: 15px
+  border-radius: 10px
 
 .orderItemDetails
+  flex: 1
   display: flex
   flex-direction: column
-  gap: 5px
 
-  h3
-    font-size: 18px
-    font-weight: 600
-    color: #333
-    text-align: center
+.title
+  color: #666
+  font-family: rubik-regular
+  font-size: 18px
 
-  .price
-    font-size: 16px
-    font-weight: 700
-    color: #007bff
-    text-align: center
+.price
+  color: green
+  font-weight: bold
 
-  .description
-    font-size: 14px
-    color: #666
-    text-align: center
+.description
+  font-size: 0.9rem
+  color: #666
 
 .deliveryOptions
   margin-top: 30px
@@ -127,8 +125,10 @@
   border-radius: 8px
   font-size: 18px
   font-weight: bold
+  justify-content: center
+  align-items: center
   cursor: pointer
-  margin-top: 30px
+  margin-top: 10px
   width: 100%
   max-width: 200px
   transition: background-color 0.3s ease
@@ -145,3 +145,12 @@
   font-weight: bold
   text-align: center
   margin-top: 30px
+
+  &:hover
+    background-color: darkgreen
+
+@keyframes fadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1

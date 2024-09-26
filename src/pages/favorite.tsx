@@ -43,26 +43,27 @@ const FavoritePage: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Animatsiya uchun
-
   return (
     <div className={styles.favorite}>
       <h1>Избранной </h1>
       <div className={styles.favorite__cards}>
-        {favoriteItems.map((item) => (
-          <div key={item._id} className={styles.favorite__card}>
-            <Image src={item.image} alt="favorite item" width={270} height={182} />
-            <div className={styles.favorite__icon}>
-              <AiFillHeart size={24} color="red" />
+        {favoriteItems.length > 0 ? (
+          favoriteItems.map((item) => (
+            <div key={item._id} className={styles.favorite__card}>
+              <Image src={item.image} alt="favorite item" width={270} height={182} />
+              <div className={styles.favorite__icon}>
+                <AiFillHeart size={24} color="red" />
+              </div>
+              <p>{item.title}</p>
+              <p>{item.price} сум</p> 
             </div>
-            <p>{item.title}</p>
-            <p>{item.price} сум</p> 
+          ))
+        ) : (
+          // Bo'sh xabarnoma faqat bo'sh bo'lsa ko'rsatiladi
+          <div className={styles.empty}>
+            <p>У вас нет любимых продуктов</p>
           </div>
-        ))}
-      </div>
-      {/* Bo'sh xabarnoma */}
-      <div  className={styles.empty}>
-        <p>У вас нет любимых продуктов</p>
+        )}
       </div>
     </div>
   );

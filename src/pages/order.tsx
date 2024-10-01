@@ -10,7 +10,7 @@ interface CartItem {
     image: string;
     title: string;
     price: string;
-    description: string;
+    desc: string;
   };
 }
 
@@ -34,7 +34,7 @@ const OrderPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<{ [key: string]: CartItem }>({});
   const [deliveryType, setDeliveryType] = useState<string>('');
   const [address, setAddress] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
+  const [phone, setPhone] = useState('+998');
   const [alert, setAlert] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
@@ -141,79 +141,145 @@ const OrderPage: React.FC = () => {
     setAlert({ ...alert, open: false });
   };
 
+  const handleQuantityChange = (id: string, operation: 'increment' | 'decrement') => {
+    setCartItems((prevItems) => {
+      const currentItem = prevItems[id];
+      if (operation === 'increment') {
+        return {
+          ...prevItems,
+          [id]: { ...currentItem, quantity: currentItem.quantity + 1 },
+        };
+      } else if (operation === 'decrement' && currentItem.quantity > 1) {
+        return {
+          ...prevItems,
+          [id]: { ...currentItem, quantity: currentItem.quantity - 1 },
+        };
+      }
+      return prevItems;
+    });
+  };
+
   return (
     <div className={styles.orderPage}>
+      <h2 className={styles.name}>Ваш заказ</h2>
+      <p className={styles.orderItemTitle}>Order Items </p>
       <div className={styles.orderItems}>
-        <h2 className={styles.name}>Информация о заказе</h2>
-        {Object.entries(cartItems).map(([id, item]) => (
-          <div key={id} className={styles.orderItem}>
-            <div className={styles.orderItemImage}>
-              <Image
-                src={item.product.image || '/fallback-image.jpg'}
-                alt="order item"
-                width={100}
-                height={100}
-                className={styles.img}
-              />
-            </div>
-            <div className={styles.orderItemDetails}>
-              <h3 className={styles.title}>{item.product.title}</h3>
-              <p className={styles.price}>{item.product.price} UZS</p>
-              <p className={styles.description}>{item.product.description}</p>
-              <p>Количество: {item.quantity}</p>
-            </div>
+  {Object.entries(cartItems).map(([id, item]) => (
+    <div key={id}>
+      <div className={styles.orderItem}>
+        <div className={styles.orderItemImage}>
+          <Image
+            src={item.product.image || '/fallback-image.jpg'}
+            alt="order item"
+            width={146}
+            height={121}
+            className={styles.img}
+          />
+        </div>
+        <div className={styles.orderItemDetails}>
+          <h3 className={styles.title}>{item.product.title}</h3>
+          <p className={styles.description}>{item.product.desc}</p>
+          <p className={styles.price}>{item.product.price} UZS</p>
+          <div className={styles.counter}>
+            <button onClick={() => handleQuantityChange(id, 'decrement')}>-</button>
+            <span>{item.quantity}</span>
+            <button onClick={() => handleQuantityChange(id, 'increment')}>+</button>
           </div>
-        ))}
+        </div>
+      </div>
+      <hr /> 
+    </div>
+  ))}
+</div>
+
+      <div className={styles.all}>
+        <p className={styles.allPrice}>Итоговая сумма:</p>
+        <p className={styles.allSum}>{calculateTotalPrice()} UZS</p>
       </div>
 
       <div className={styles.deliveryOptions}>
         <h2 className={styles.option}>Варианты доставки</h2>
         <div className={styles.deliveryChoices}>
-          <label className={`${styles.deliveryLabel} ${deliveryType === 'доставка' ? styles.active : ''}`}>
-            <input
-              type="radio"
-              value="доставка"
-              checked={deliveryType === 'доставка'}
-              onChange={handleDeliveryChange}
-            />
-            Доставка
-          </label>
-          <label className={`${styles.deliveryLabel} ${deliveryType === 'самовывоз' ? styles.active : ''}`}>
-            <input
-              type="radio"
-              value="самовывоз"
-              checked={deliveryType === 'самовывоз'}
-              onChange={handleDeliveryChange}
-            />
-            Самовывоз
-          </label>
+          <div className={styles.choicecont}>
+            <label className={`${styles.deliveryLabel} ${deliveryType === 'доставка' ? styles.active : ''}`}>
+              <input
+                type="radio"
+                value="доставка"
+                checked={deliveryType === 'доставка'}
+                onChange={handleDeliveryChange}
+              />
+              Доставка на дом
+            </label>
+            <div className={styles.info}>до 5 км бесплатно</div>
+          </div>
+          <div className={styles.choicecont}>
+            <label className={`${styles.deliveryLabel} ${deliveryType === 'самовывоз' ? styles.active : ''}`}>
+              <input
+                type="radio"
+                value="самовывоз"
+                checked={deliveryType === 'самовывоз'}
+                onChange={handleDeliveryChange}
+              />
+              Самовывоз
+            </label>
+            <div className={styles.info}>включите уведомления</div>
+          </div>
         </div>
 
         {deliveryType === 'доставка' && (
           <div className={styles.deliveryDetails}>
             <label>
               Адрес:
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
+              <div className={styles.inputWrapper}>
+                <img src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
+                <input
+                  type="text"
+                  placeholder='Введите адрес...'
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
             </label>
             <label>
               Телефон:
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <div className={styles.inputWrapper}>
+                <img src="/assets/img/inp2.png" alt="icon" className={styles.icon} />
+                <input
+                  type="text"
+                  placeholder="Введите номер телефона..."
+                  value={phone}
+                  onChange={(e) => {
+                    let input = e.target.value.replace(/\D/g, ''); // Faqat raqamlar qoldiriladi
+                    if (input.length <= 12) {
+                      if (!input.startsWith('998')) {
+                        input = '998' + input; // Agar foydalanuvchi 998 ni yozmagan bo'lsa, avtomatik qo'shiladi
+                      }
+                      // Telefon raqamini to'g'ri formatda shakllantirish
+                      const formattedPhone = '+998 ' + input.slice(3, 5) + ' ' + input.slice(5, 8) + ' ' + input.slice(8, 10) + ' ' + input.slice(10, 12);
+                      setPhone(formattedPhone);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (phone === '+998') {
+                      setPhone('+998 ');
+                    }
+                  }}
+                  className={styles.inputField}
+                />
+
+
+              </div>
             </label>
           </div>
         )}
       </div>
 
       <div className={styles.orderSummary}>
-        <h2>Общая цена: {calculateTotalPrice()} UZS</h2>
-        <button className={styles.submitButton} onClick={handleOrder}>Разместить заказ</button>
+        {/* <h2>Общая цена: {calculateTotalPrice()} UZS</h2> */}
+        <button className={styles.submitButton} onClick={handleOrder}>
+          <img src="/assets/img/btnicon.png" alt="icon" className={styles.buttonIcon} />
+          Завершить заказ
+        </button>
       </div>
 
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>

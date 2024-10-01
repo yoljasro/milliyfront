@@ -153,11 +153,10 @@ const Fatest: React.FC = () => {
               alt={productDetails[cardId].title}
               width={270}
               height={122}
-              // layout="responsive"
             />
             <p className={styles.fatest__title}>{productDetails[cardId].title}</p>
             <div className={styles.fatest__desc}>
-            <p>{productDetails[cardId].desc}</p>
+              <p>{productDetails[cardId].desc}</p>
             </div>
             <p className={styles.fatest__price}>{productDetails[cardId].price} UZS</p>
             <div className={styles.fatest__timer}>

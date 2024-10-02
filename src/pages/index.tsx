@@ -4,7 +4,7 @@ import styles from "../styles/Home.module.css";
 import CarouselCards from "components/CarouselCards";
 import  Fatest  from "components/Fatest";
 import { Popular } from "components/Popular";
-import PaymentPage  from "components/Click";
+// import PaymentPage  from "components/Click";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

@@ -4,6 +4,7 @@ import styles from "../styles/Home.module.css";
 import CarouselCards from "components/CarouselCards";
 import  Fatest  from "components/Fatest";
 import { Popular } from "components/Popular";
+import { useEffect } from "react";
 // import PaymentPage  from "components/Click";
 
 const geistSans = localFont({
@@ -18,6 +19,14 @@ const geistMono = localFont({
 });
 
 export default function Home() {
+  useEffect(() => {
+    if (window.Telegram.WebApp) {
+      window.Telegram.WebApp.expand(); // Web App'ni to'liq ekran qilish
+    }
+  }, []);
+  
+
+  
   return (
     <>
       <Head> 
@@ -26,6 +35,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      
       <div
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >

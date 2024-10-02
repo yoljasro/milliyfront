@@ -2,6 +2,7 @@
 declare global {
   interface TelegramWebApp {
     ready: () => void;
+    expand: () => void; // expand funksiyasini qo'shish
     close?: () => void; // close metodini optional qilib qo'shamiz
     initDataUnsafe: {
       user?: {
@@ -18,3 +19,17 @@ declare global {
 }
 
 export {};
+
+// src/global.d.ts
+
+interface TelegramWebApp {
+  expand: () => void;
+  // Boshqa funksiyalarni ham bu yerga qo'shishingiz mumkin
+}
+
+interface Window {
+  Telegram: {
+    WebApp: TelegramWebApp;
+  };
+}
+

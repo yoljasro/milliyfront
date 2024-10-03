@@ -19,11 +19,11 @@ const geistMono = localFont({
 });
 
 export default function Home() {
-  useEffect(() => {
-    if (window.Telegram.WebApp) {
-      window.Telegram.WebApp.expand(); // Web App'ni to'liq ekran qilish
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Telegram.WebApp) {
+  //     window.Telegram.WebApp.expand(); // Web App'ni to'liq ekran qilish
+  //   }
+  // }, []);
   
 
   

@@ -1,54 +1,48 @@
-// import { useState } from 'react';
-// import axios from 'axios';
-// import styles from './index.module.css';
+import { useState } from 'react';
+import axios from 'axios';
 
-// const PaymentPage = () => {
-//   const [amount, setAmount] = useState(50000); // Narx UZSda (masalan, 50,000 UZS)
-//   const [orderId, setOrderId] = useState('ORD123456'); // Misol uchun buyurtma ID
-//   const [loading, setLoading] = useState(false);
-//   const [paymentUrl, setPaymentUrl] = useState('');
+interface ClickProps {
+  totalPrice: number; // Total price prop
+  onSuccess: () => void; // To'lov muvaffaqiyatli bo'lsa chaqiriladigan callback
+}
 
-//   const handlePayment = async () => {
-//     try {
-//       setLoading(true);
-//       const response = await axios.post('https://nationalfoodbot-production.up.railway.app/api/payment', {
-//         amount: amount,
-//         order_id: orderId,
-//       });
+export const Click: React.FC<ClickProps> = ({ totalPrice, onSuccess }) => {
+  const [merchantTransId, setMerchantTransId] = useState<string>(generateMerchantTransId()); // Order ID
+  const [phoneNumber, setPhoneNumber] = useState<string>(''); // Foydalanuvchining telefon raqami
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-//       console.log('Payment response:', response.data); // Yangi log qo'shildi
+  // Noyob buyurtma identifikatorini yaratish
+  function generateMerchantTransId() {
+    return `order_${Date.now()}`; // Hozirgi vaqtni millisekundda olish va undan noyob identifikator yaratish
+  }
 
-//       const { paymentUrl } = response.data;
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post('http://localhost:4000/create-invoice', {
+        amount: totalPrice, // Total price prop
+        phoneNumber, // Telefon raqamini yuborish
+        merchantTransId,
+      });
 
-//       if (!paymentUrl) {
-//         alert('Payment URL not received from server.');
-//         return;
-//       }
+      // Foydalanuvchini to'lov sahifasiga yo'naltirish
+      window.location.href = response.data.paymentUrl;
 
-//       // To'lov sahifasini yangi oynada oching
-//       window.open(paymentUrl, '_blank');
-//     } catch (error) {
-//       console.error('Error creating payment:', error);
-//       const errorMessage = error.response?.data?.error || 'Payment failed!';
-//       alert(errorMessage);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+      // To'lov muvaffaqiyatli bo'lsa callback'ni chaqiramiz
+      onSuccess();
+    } catch (error) {
+      console.error('To\'lov yaratishda xato:', error);
+      setErrorMessage('To\'lov yaratishda xato yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+    }
+  };
 
-//   return (
-//     <div className={styles.paymentContainer}>
-//       <h2>Mahsulot uchun to'lov</h2>
-//       <div className={styles.productInfo}>
-//         <p className={styles.title}>Mahsulot: Test Mahsulot</p>
-//         <p className={styles.price}>Narx: {amount} UZS</p>
-//       </div>
-//       <button className={styles.payButton} onClick={handlePayment} disabled={loading}>
-//         {loading ? 'Jarayon...' : 'Hozir to\'la'}
-//       </button>
-//       {paymentUrl && <p>To'lov sahifasiga yo'naltirilmoqda...</p>}
-//     </div>
-//   );
-// };
-
-// export default PaymentPage;
+  return (
+    <div style={{ padding: '20px', color: "black" }}>
+      <h1>To'lov</h1>
+      <p>Price: <span>{totalPrice} UZS</span></p>
+      <button onClick={handlePayment} style={{ padding: '10px 20px' }}>
+        To'lov qilish
+      </button>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </div>
+  );
+};

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styles from '../styles/order.module.sass';
 import { Snackbar, Alert } from '@mui/material';
+import { Click } from 'components/Click';
 
 interface CartItem {
   quantity: number;
@@ -164,33 +165,33 @@ const OrderPage: React.FC = () => {
       <h2 className={styles.name}>Ваш заказ</h2>
       <p className={styles.orderItemTitle}>Order Items </p>
       <div className={styles.orderItems}>
-  {Object.entries(cartItems).map(([id, item]) => (
-    <div key={id}>
-      <div className={styles.orderItem}>
-        <div className={styles.orderItemImage}>
-          <Image
-            src={item.product.image || '/fallback-image.jpg'}
-            alt="order item"
-            width={146}
-            height={121}
-            className={styles.img}
-          />
-        </div>
-        <div className={styles.orderItemDetails}>
-          <h3 className={styles.title}>{item.product.title}</h3>
-          <p className={styles.description}>{item.product.desc}</p>
-          <p className={styles.price}>{item.product.price} UZS</p>
-          <div className={styles.counter}>
-            <button onClick={() => handleQuantityChange(id, 'decrement')}>-</button>
-            <span>{item.quantity}</span>
-            <button onClick={() => handleQuantityChange(id, 'increment')}>+</button>
+        {Object.entries(cartItems).map(([id, item]) => (
+          <div key={id}>
+            <div className={styles.orderItem}>
+              <div className={styles.orderItemImage}>
+                <Image
+                  src={item.product.image || '/fallback-image.jpg'}
+                  alt="order item"
+                  width={146}
+                  height={121}
+                  className={styles.img}
+                />
+              </div>
+              <div className={styles.orderItemDetails}>
+                <h3 className={styles.title}>{item.product.title}</h3>
+                <p className={styles.description}>{item.product.desc}</p>
+                <p className={styles.price}>{item.product.price} UZS</p>
+                <div className={styles.counter}>
+                  <button onClick={() => handleQuantityChange(id, 'decrement')}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(id, 'increment')}>+</button>
+                </div>
+              </div>
+            </div>
+            <hr /> 
           </div>
-        </div>
+        ))}
       </div>
-      <hr /> 
-    </div>
-  ))}
-</div>
 
       <div className={styles.all}>
         <p className={styles.allPrice}>Итоговая сумма:</p>
@@ -243,47 +244,22 @@ const OrderPage: React.FC = () => {
             <label>
               Телефон:
               <div className={styles.inputWrapper}>
-                <img src="/assets/img/inp2.png" alt="icon" className={styles.icon} />
+                <img src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
                 <input
                   type="text"
-                  placeholder="Введите номер телефона..."
+                  placeholder="Введите телефон..."
                   value={phone}
-                  onChange={(e) => {
-                    let input = e.target.value.replace(/\D/g, ''); // Faqat raqamlar qoldiriladi
-                    if (input.length <= 12) {
-                      if (!input.startsWith('998')) {
-                        input = '998' + input; // Agar foydalanuvchi 998 ni yozmagan bo'lsa, avtomatik qo'shiladi
-                      }
-                      // Telefon raqamini to'g'ri formatda shakllantirish
-                      const formattedPhone = '+998 ' + input.slice(3, 5) + ' ' + input.slice(5, 8) + ' ' + input.slice(8, 10) + ' ' + input.slice(10, 12);
-                      setPhone(formattedPhone);
-                    }
-                  }}
-                  onFocus={() => {
-                    if (phone === '+998') {
-                      setPhone('+998 ');
-                    }
-                  }}
-                  className={styles.inputField}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
-
-
               </div>
             </label>
           </div>
         )}
       </div>
 
-      <div className={styles.orderSummary}>
-        {/* <h2>Общая цена: {calculateTotalPrice()} UZS</h2> */}
-        <button className={styles.submitButton} onClick={handleOrder}>
-          <img src="/assets/img/btnicon.png" alt="icon" className={styles.buttonIcon} />
-          Завершить заказ
-        </button>
-      </div>
-
+      <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} />
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert onClose={handleCloseAlert} severity={alert.severity}>
+        <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>
           {alert.message}
         </Alert>
       </Snackbar>

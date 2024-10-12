@@ -1,5 +1,5 @@
-import { Categories } from 'components/Categories';
-// import { Fooders } from 'components/Fooders';
+// import { Categories } from 'components/Categories';
+import Fooders  from 'components/Fooders';
 import React from 'react';
 // import { Categories } from '@/';
 // import styles from './index.module.css';
@@ -8,8 +8,8 @@ import React from 'react';
 const Foods: React.FC = () => {
     return (
         <div>
-            <Categories/>
-            {/* <Fooders/> */}
+            {/* <Categories/> */}
+            <Fooders/>
         </div>
     );
 };

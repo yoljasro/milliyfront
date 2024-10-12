@@ -60,24 +60,6 @@ export const Menu: React.FC = () => {
           </div>
         </Link>
 
-        <Link href={'/search'}>
-          <div
-            className={`${styles.menu__items} ${activeMenu === 'search' ? styles.active : ''}`}
-            onClick={() => setActiveMenu('search')}
-          >
-            <Image
-              src={'/assets/img/search.svg'}
-              alt='search'
-              width={24}
-              height={24}
-              className={activeMenu === 'search' ? styles.activeImage : ''}
-            />
-            <p className={`${styles.menu__title} ${activeMenu === 'search' ? styles.activeText : ''}`}>
-              Поиск
-            </p>
-          </div>
-        </Link>
-
         <Link href={'/favorite'}>
           <div
             className={`${styles.menu__items} ${styles.heart} ${activeMenu === 'favorites' ? styles.active : ''}`}

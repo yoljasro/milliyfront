@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/search.module.sass';
 import { FaSearch } from 'react-icons/fa';
+import Image from 'next/image';
 import Fatest from '../components/Fatest'; // Fatest componentini yuklash
 
 interface Product {
@@ -68,7 +69,7 @@ const SearchPage: React.FC = () => {
             {/* Mahsulotlarni qidirib topish */}
             {filteredProducts.map((product) => (
               <div key={product._id} className={styles.productCard}>
-                <img src={product.image} alt={product.title} className={styles.productImage} />
+                <Image src={product.image} alt={product.title} className={styles.productImage} />
                 <h4>{product.title}</h4>
                 <p>{product.price} UZS</p>
               </div>

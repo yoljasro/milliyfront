@@ -4,8 +4,6 @@ import styles from "../styles/Home.module.css";
 import CarouselCards from "components/CarouselCards";
 import  Fatest  from "components/Fatest";
 import { Popular } from "components/Popular";
-import { useEffect } from "react";
-import { Click } from "components/Click";
 import { Payme } from "components/Payme";
 // import PaymentPage  from "components/Click";
 

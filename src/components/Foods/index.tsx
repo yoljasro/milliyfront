@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 import styles from './index.module.css';
 
 interface Product {
@@ -121,7 +122,7 @@ const Food: React.FC = () => {
             const product = products.find(prod => prod._id === p.productId);
             return product ? (
               <li key={p.productId} className={styles.orderItem}>
-                <img
+                <Image
                   src={`http://localhost:9000${product.image.replace(/\\/g, '/')}`}
                   alt={product.title}
                   className={styles.orderImage}
@@ -228,7 +229,7 @@ const Food: React.FC = () => {
 
     return (
       <div className={styles.productCard} key={product._id}>
-        <img
+        <Image
           className={styles.productImage}
           src={`http://localhost:9000${product.image.replace(/\\/g, '/')}`}
           alt={product.title}

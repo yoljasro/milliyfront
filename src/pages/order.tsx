@@ -232,7 +232,7 @@ const OrderPage: React.FC = () => {
             <label>
               Адрес:
               <div className={styles.inputWrapper}>
-                <img src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
+                <Image src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
                 <input
                   type="text"
                   placeholder='Введите адрес...'
@@ -244,7 +244,7 @@ const OrderPage: React.FC = () => {
             <label>
               Телефон:
               <div className={styles.inputWrapper}>
-                <img src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
+                <Image src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
                 <input
                   type="text"
                   placeholder="Введите телефон..."
@@ -257,7 +257,9 @@ const OrderPage: React.FC = () => {
         )}
       </div>
 
-      <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} />
+      <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
+    console.log('Order was successful!');
+  }}/>
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
         <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>
           {alert.message}

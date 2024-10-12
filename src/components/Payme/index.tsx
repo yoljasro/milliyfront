@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export const Payme = () => {
-  const [amount, setAmount] = useState(10000);  // Example amount in the smallest unit (e.g., cents)
-  const [phone, setPhone] = useState("998XXXXXXXXX");  // Example phone number
+  const [amount] = useState(10000);  // Example amount in the smallest unit (e.g., cents)
+  const [phone] = useState("998XXXXXXXXX");  // Example phone number
   const [loading, setLoading] = useState(false);
 
   const handlePayment = async () => {
@@ -15,16 +15,22 @@ export const Payme = () => {
         phone
       });
 
-      // Check if a URL is returned 
+      // Check if a URL is returned
       if (response.data.url) {
         // Redirect user to the Payme payment page
         window.location.href = response.data.url;
       } else {
         alert("Failed to initiate payment");
       }
-    } catch (error) {
-      console.error("Payment failed:", error.message);
-      alert("Payment failed. Please try again.");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // TypeScript now knows error has 'message' property
+        console.error("Payment failed:", error.message);
+        alert(`Payment failed. Please try again. Error: ${error.message}`);
+      } else {
+        console.error("Unexpected error", error);
+        alert("Payment failed due to an unexpected error.");
+      }
     } finally {
       setLoading(false);
     }
@@ -39,4 +45,3 @@ export const Payme = () => {
     </div>
   );
 };
-

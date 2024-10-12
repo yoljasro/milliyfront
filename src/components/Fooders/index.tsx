@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './index.module.sass';
 import Image from 'next/image';
 import axios from 'axios';
@@ -10,9 +10,16 @@ const categories = [
   { title: "Мучные изделия" }
 ];
 
+// Define the Product type
+interface Product {
+  title: string;
+  image: string;
+  price: number;
+}
+
 const Fooders: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]); // Use the Product type here
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleCategoryClick = async (category: string) => {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import styles from './index.module.sass'; // Ensure this stylesheet is created
 
 interface Product {
@@ -48,7 +49,7 @@ const Products: React.FC = () => {
     <div className={styles.productsContainer} id='products'>
       {productList.map((product) => (
         <div key={product.id} className={styles.card}>
-          <img src={product.image} alt={product.title} className={styles.image} />
+          <Image src={product.image} alt={product.title} className={styles.image} />
           <div className={styles.details}>
             <h3 className={styles.title}>{product.title}</h3>
             <p className={styles.description}>{product.description}</p>

@@ -3,7 +3,6 @@ import styles from './index.module.sass';
 import Image from 'next/image';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
 interface Product {
   _id: string;

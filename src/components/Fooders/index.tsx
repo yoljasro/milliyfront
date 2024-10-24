@@ -20,26 +20,26 @@ interface Product {
 const predefinedProducts: Record<string, Product[]> = {
  "Первые блюда": [
     { title: "Лагман", desc: "Вкусный Лагман", price: "45000", image: "/assets/img/lagmon.jpg" },
-    { title: "Шурпа", desc: "Классические Шурпа", price: "40000", image: "/assets/img/shurva.jpg" },
-    { title: "Мастава", desc: "Классические Мастава", price: "40000", image: "/assets/img/mastava.jpg" },
-    { title: "Мампар", desc: "Классические Мампар", price: "40000", image: "/assets/img/mampar.jpg" },
+    { title: "Шурпа", desc: "Класическая Шурпа", price: "40000", image: "/assets/img/shurva.jpg" },
+    { title: "Мастава", desc: "Класическая Мастава", price: "40000", image: "/assets/img/mastava.jpg" },
+    { title: "Мампар", desc: "Класическая Мампар", price: "40000", image: "/assets/img/mampar.jpg" },
   ],
   "Вторые блюда": [
-    { title: "Плов", desc: "Традиционный плов", price: "50000", image: "/assets/img/plov.jpg" },
-    { title: "вагури", desc: "Традиционный вагури", price: "550000", image: "/assets/img/vaguri.jpg" },
-    { title: "норин", desc: "Традиционный норин", price: "45000", image: "/assets/img/norin.jpg" },
+    { title: "Плов", desc: "Традиционная плов", price: "50000", image: "/assets/img/plov.jpg" },
+    { title: "вагури", desc: "Традиционная вагури", price: "550000", image: "/assets/img/vaguri.jpg" },
+    { title: "норин", desc: "Традиционная норин", price: "45000", image: "/assets/img/norin.jpg" },
   ],
   "Салаты": [
-    { title: "Аччичук", desc: "Традиционный Аччичук", price: "30000", image: "/assets/img/aciq.jpg" },
-    { title: "Весенний", desc: "Традиционный Весений", price: "30000", image: "/assets/img/bahor.jpg" },
-    { title: "Хоровац", desc: "Традиционный Хоровац", price: "30000", image: "/assets/img/xaro.jpg" },
-    { title: "Чирокчи", desc: "Традиционный Чирокчи", price: "30000", image: "/assets/img/ciroq.jpg" },
+    { title: "Аччичук", desc: "Традиционная Аччичук", price: "30000", image: "/assets/img/aciq.jpg" },
+    { title: "Весенний", desc: "Традиционная Весений", price: "30000", image: "/assets/img/bahor.jpg" },
+    { title: "Хоровац", desc: "Традиционная Хоровац", price: "30000", image: "/assets/img/xaro.jpg" },
+    { title: "Чирокчи", desc: "Традиционная Чирокчи", price: "30000", image: "/assets/img/ciroq.jpg" },
   ],
   "Мучные изделия": [
     { title: "Олот самса с мясом", desc: "Традиционный Олот самса с мясом", price: "18000", image: "/assets/img/samsagosh.jpg" },
     { title: "Олот самса с зеленью", desc: "Традиционный Олот самса с зеленью", price: "12000", image: "/assets/img/samsagreen.jpg" },
-    { title: "Лепешки ", desc: "Традиционный лепешки ", price: "10000", image: "/assets/img/leposh.jpg" },
-    { title: "патыр кокандский", desc: "Традиционный патыр кокандский", price: "10000", image: "/assets/img/patir.jpg" },
+    { title: "Лепешки ", desc: "Традиционная лепешки ", price: "10000", image: "/assets/img/leposh.jpg" },
+    { title: "патыр кокандский", desc: "Традиционная патыр кокандский", price: "10000", image: "/assets/img/patir.jpg" },
   ],
 };
 

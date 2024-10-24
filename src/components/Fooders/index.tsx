@@ -38,8 +38,8 @@ const predefinedProducts: Record<string, Product[]> = {
   "Мучные изделия": [
     { title: "Олот самса с мясом", desc: "Традиционный Олот самса с мясом", price: "18000", image: "/assets/img/samsagosh.jpg" },
     { title: "Олот самса с зеленью", desc: "Традиционный Олот самса с зеленью", price: "12000", image: "/assets/img/samsagreen.jpg" },
-    { title: "Лепешки ", desc: "Традиционная лепешки ", price: "10000", image: "/assets/img/leposh.jpg" },
-    { title: "патыр кокандский", desc: "Традиционная патыр кокандский", price: "10000", image: "/assets/img/patir.jpg" },
+    { title: "Лепешки ", desc: "Традиционный Лепешки ", price: "10000", image: "/assets/img/leposh.jpg" },
+    { title: "Патыр кокандский", desc: "Традиционный Патыр кокандский", price: "10000", image: "/assets/img/patir.jpg" },
   ],
 };
 

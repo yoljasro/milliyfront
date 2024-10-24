@@ -28,19 +28,29 @@ interface OrderData {
   paymentStatus: string;
   orderStatus: string;
 }
+interface QueryItems {
+  [key: string]: CartItem;
+}
 
 const OrderPage: React.FC = () => {
   const router = useRouter();
   const { query } = router;
   const [cartItems, setCartItems] = useState<{ [key: string]: CartItem }>({});
-  const [deliveryType, setDeliveryType] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
+  const [deliveryType, setDeliveryType] = useState<string>(''); 
+  const [address, setAddress] = useState<string>(''); 
   const [phone, setPhone] = useState('+998');
   const [alert, setAlert] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
     if (query.items) {
-      setCartItems(JSON.parse(query.items as string));
+      const items: QueryItems = JSON.parse(query.items as string);
+      const filteredItems = Object.entries(items).reduce((acc, [key, item]) => {
+        const { image, title, price, desc } = item.product;
+        acc[key] = { quantity: item.quantity, product: { image, title, price, desc } };
+        return acc;
+      }, {} as { [key: string]: CartItem });
+      
+      setCartItems(filteredItems);
     }
 
     if (window.Telegram && window.Telegram.WebApp) {
@@ -83,7 +93,7 @@ const OrderPage: React.FC = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:9000/orders', {
+      const response = await fetch('https://backmilliy-production.up.railway.app/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,14 +125,14 @@ const OrderPage: React.FC = () => {
 
   const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
     const telegramMessage = {
-      chat_id: '1847596793',
+      chat_id: '7965465294',
       text: `Получен новый заказ:\n\nТовары:\n${orderData.products
         .map(item => `${item.productName} - ${item.quantity}`)
         .join('\n')}\n\nОбщая стоимость: ${totalPrice} сум\nСтатус заказа: ${orderData.orderStatus}`,
     };
 
     try {
-      const response = await fetch('https://api.telegram.org/bot6837472952:AAE_uj8Ovl5ult8urjEVQUWptSKSJKBzws4/sendMessage', {
+      const response = await fetch('https://api.telegram.org/bot7965465294:AAF2cKY7yoDVG80hySTK6bcwQocoX3BO9-U/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +173,7 @@ const OrderPage: React.FC = () => {
   return (
     <div className={styles.orderPage}>
       <h2 className={styles.name}>Ваш заказ</h2>
-      <p className={styles.orderItemTitle}>Order Items </p>
+      <p className={styles.orderItemTitle}>Предметы заказа </p>
       <div className={styles.orderItems}>
         {Object.entries(cartItems).map(([id, item]) => (
           <div key={id}>
@@ -232,24 +242,24 @@ const OrderPage: React.FC = () => {
             <label>
               Адрес:
               <div className={styles.inputWrapper}>
-                <img src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
+                <img src="/assets/img/location.png" className={styles.inputIcon} />
                 <input
                   type="text"
-                  placeholder='Введите адрес...'
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  placeholder="Введите адрес"
                 />
               </div>
             </label>
             <label>
               Телефон:
               <div className={styles.inputWrapper}>
-                <img src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
+                <img src="/assets/img/phone.png" className={styles.inputIcon} />
                 <input
-                  type="text"
-                  placeholder="Введите телефон..."
+                  type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Ваш телефон"
                 />
               </div>
             </label>
@@ -260,7 +270,7 @@ const OrderPage: React.FC = () => {
         console.log('Order was successful!');
 
       }} />
-      <button onClick={handleOrder} className={styles.submitButton}>Order</button>
+      <button onClick={handleOrder} className={styles.submitButton}>Заказать</button>
 
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
         <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>

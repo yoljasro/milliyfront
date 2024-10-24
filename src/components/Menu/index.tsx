@@ -62,7 +62,7 @@ export const Menu: React.FC = () => {
 
         <Link href={'/favorite'}>
           <div
-            className={`${styles.menu__items} ${styles.heart} ${activeMenu === 'favorites' ? styles.active : ''}`}
+            className={`${styles.menu__itemss} ${styles.heart} ${activeMenu === 'favorites' ? styles.active : ''}`}
             onClick={() => setActiveMenu('favorites')}
           >
             <Image
@@ -71,7 +71,7 @@ export const Menu: React.FC = () => {
               width={24}
               height={24}
               className={activeMenu === 'favorites' ? styles.activeImage : ''}
-              style={{ position: 'relative', left: "10px" }} // 20px o'ngga joylashtirish
+              style={{ position: 'relative', left: "13px" }} // 20px o'ngga joylashtirish
             />
             <p className={`${styles.menu__title} ${activeMenu === 'favorites' ? styles.activeText : ''}`}>
               Любимый

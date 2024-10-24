@@ -16,14 +16,14 @@ const FavoritePage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:9000/products');
+        const response = await fetch('https://backmilliy-production.up.railway.app/products');
         const data = await response.json();
     
         const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
           const cleanedImagePath = product.image.replace(/\\/g, '/').replace(/^\//, '');
           acc[product._id] = {
             ...product,
-            image: `http://localhost:9000/${cleanedImagePath}`,
+            image: `https://backmilliy-production.up.railway.app/${cleanedImagePath}`,
           };
           return acc;
         }, {}); 

@@ -67,7 +67,7 @@
     display: inline-block
     width: 100%
     max-width: 270px
-    height: 380px
+    height: 410px
     border-radius: 8px
     background: #FFFFFF
     border: 1px solid green
@@ -101,17 +101,24 @@
 
   &__desc
     color: #494C61
-    font-size: 10px
-    // width: 100%
+    font-size: 14px
     padding-top: 10px
+    display: flex
+    justify-content: center
+    align-items: center
     width: 100%
-    // padding-left: 20px
-    // display: none
-    padding-right: 20px 
-    // height: 60px
-    // margin-right: 10px
-    // border: 1px solid black
     text-align: center
+    padding-left: 5px // Kartaning chetidan padding qo'shildi
+    padding-right: 5px // Kartaning chetidan padding qo'shildi
+
+  &__descText
+    width: 100% // Matn kengligi kartaning kengligiga moslashadi
+    word-wrap: break-word // Matnni uzun bo'lsa avtomatik qatorga o'tkazadi
+    white-space: normal // Matn qatorlarga bo'linishi uchun
+    text-align: center
+    padding-right: 5px
+    line-height: 1.5em // Har bir qatorning orasidagi masofa
+
 
   &__price
     color: #0B0C17
@@ -132,6 +139,7 @@
     margin-top: 11px
     justify-content: center
     padding-right: 20px
+    padding-bottom: 5px
 
     & p
       color: #494C61
@@ -148,6 +156,7 @@
     bottom: 0
     // background-color: #FFFFFF
     border-top: 1px solid #F0F0F0
+    margin-top: 5px
 
   &__addToCart
     display: flex

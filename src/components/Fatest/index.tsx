@@ -41,7 +41,7 @@ const Fatest: React.FC = () => {
           const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
             acc[product._id] = {
               ...product,
-              image: `https://backmilliy-production.up.railway.app/${product.image.replace(/\\/g, '/')}`, // Corrected URL
+              image: `https://backmilliy-production.up.railway.app${product.image.replace(/\\/g, '/')}`, // Corrected URL
             };
             return acc;
           }, {});
@@ -161,12 +161,12 @@ const Fatest: React.FC = () => {
             />
             <p className={styles.fatest__title}>{productDetails[cardId].title}</p>
             <div className={styles.fatest__desc}>
-              <p>{productDetails[cardId].desc}</p>
+              <p className={styles.fatest__descText}>{productDetails[cardId].desc}</p>
             </div>
             <p className={styles.fatest__price}>{productDetails[cardId].price} UZS</p>
             <div className={styles.fatest__timer}>
               <Image alt='timer' src={'/assets/img/timer.svg'} width={16} height={16} />
-              <p>{productDetails[cardId].minute} min</p>
+              <p>{productDetails[cardId].minute} мин</p>
             </div>
             <div className={styles.fatest__cardActions}>
               {getCartQuantity(cardId) === 0 ? (

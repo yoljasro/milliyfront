@@ -83,7 +83,7 @@ const OrderPage: React.FC = () => {
     };
 
     try {
-      const response = await fetch('https://milliyadmin.uz/orders', {
+      const response = await fetch('http://localhost:9000/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ const OrderPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            <hr /> 
+            <hr />
           </div>
         ))}
       </div>
@@ -232,7 +232,7 @@ const OrderPage: React.FC = () => {
             <label>
               Адрес:
               <div className={styles.inputWrapper}>
-                <Image src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
+                <img src="/assets/img/inp1.png" alt="icon" className={styles.buttonIcon} />
                 <input
                   type="text"
                   placeholder='Введите адрес...'
@@ -244,7 +244,7 @@ const OrderPage: React.FC = () => {
             <label>
               Телефон:
               <div className={styles.inputWrapper}>
-                <Image src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
+                <img src="/assets/img/inp2.png" alt="icon" className={styles.buttonIcon} />
                 <input
                   type="text"
                   placeholder="Введите телефон..."
@@ -256,10 +256,12 @@ const OrderPage: React.FC = () => {
           </div>
         )}
       </div>
-
       <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
-    console.log('Order was successful!');
-  }}/>
+        console.log('Order was successful!');
+
+      }} />
+      <button onClick={handleOrder} className={styles.submitButton}>Order</button>
+
       <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>
         <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>
           {alert.message}

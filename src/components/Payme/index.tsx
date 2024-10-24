@@ -10,15 +10,15 @@ export const Payme = () => {
     setLoading(true);
     try {
       // Send payment request to the backend
-      const response = await axios.post("https://0298-84-54-120-223.ngrok-free.app/api/payment", {
+      const response = await axios.post("https://83a4-84-54-120-223.ngrok-free.app/api/payment", {
         amount,
-        phone
+        phone 
       });
 
       // Check if a URL is returned
       if (response.data.url) {
         // Redirect user to the Payme payment page
-        window.location.href = response.data.url;
+        window.location.href = response.data.url; 
       } else {
         alert("Failed to initiate payment");
       }

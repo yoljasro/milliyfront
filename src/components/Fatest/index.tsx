@@ -3,6 +3,7 @@ import styles from './index.module.sass';
 import Image from 'next/image';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface Product {
   _id: string;
@@ -28,7 +29,7 @@ const Fatest: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://milliyadmin.uz/products');
+        const response = await fetch('https://backmilliy-production.up.railway.app/products');
         
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -41,7 +42,7 @@ const Fatest: React.FC = () => {
           const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
             acc[product._id] = {
               ...product,
-              image: `https://milliyadmin.uz${product.image.replace(/\\/g, '/')}`, // Corrected URL
+              image: `https://backmilliy-production.up.railway.app/${product.image.replace(/\\/g, '/')}`, // Corrected URL
             };
             return acc;
           }, {});
@@ -60,6 +61,9 @@ const Fatest: React.FC = () => {
     fetchProducts();
   }, []);
   
+  const handleButtonClick = () => {
+    router.push('/foods'); // '/foods' sahifasiga o'tkazadi
+  };
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favoriteItems');
@@ -135,7 +139,9 @@ const Fatest: React.FC = () => {
       <div className={styles.fatest__cont}>
         <div className={styles.fatest__content}>
           <p>Быстрая доставка 🔥</p>
-          <button>Смотреть все</button>
+          {/* <a href={'/foods'}> */}
+          <button onClick={handleButtonClick}>Смотреть все</button>
+          {/* </a> */}
         </div>
       </div>
       <div className={styles.fatest__cards}>

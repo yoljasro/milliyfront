@@ -46,3 +46,19 @@
 .payButton:hover {
   background-color: #005bb5;
 }
+
+.click{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: left;
+  align-content: left;
+  font-family: rubik-medium;
+  gap: 10px;
+  margin-top: 25px;
+}
+.click img {
+  position: relative;
+  top: -30px;
+  left: -25px;
+}

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+import styles from './index.module.css'
 
 interface ClickProps {
   totalPrice: number; // Total price prop
@@ -19,7 +21,7 @@ export const Click: React.FC<ClickProps> = ({ totalPrice, onSuccess }) => {
 
   const handlePayment = async () => {
     try {
-      const response = await axios.post('http://localhost:4000/create-invoice', {
+      const response = await axios.post('http://localhost:9000/create-invoice', {
         amount: totalPrice,
         phoneNumber,
         merchantTransId,
@@ -34,12 +36,10 @@ export const Click: React.FC<ClickProps> = ({ totalPrice, onSuccess }) => {
   };
 
   return (
-    <div style={{ padding: '20px', color: "black" }}>
-      <h1>Tolov</h1>
-      <p>Price: <span>{totalPrice} UZS</span></p>
-      <button onClick={handlePayment} style={{ padding: '10px 20px' }}>
-        Tolov qilish
-      </button>
+    <div style={{ padding: '20px', color: "black" }} className={styles.click}>
+      <h1>Оплата </h1>
+      <p>Цена: <span>{totalPrice} UZS</span></p>
+     <Image  onClick={handlePayment} src='/assets/img/click.png' alt='clickimage' width={180} height={180}/>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
   );

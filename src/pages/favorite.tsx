@@ -16,14 +16,14 @@ const FavoritePage: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('https://milliyadmin.uz/products');
+        const response = await fetch('http://localhost:9000/products');
         const data = await response.json();
     
         const productsMap = data.reduce((acc: Record<string, Product>, product: Product) => {
           const cleanedImagePath = product.image.replace(/\\/g, '/').replace(/^\//, '');
           acc[product._id] = {
             ...product,
-            image: `https://milliyadmin.uz/${cleanedImagePath}`,
+            image: `http://localhost:9000/${cleanedImagePath}`,
           };
           return acc;
         }, {}); 

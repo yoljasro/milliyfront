@@ -43,7 +43,7 @@ export default function Home() {
       >
         <CarouselCards/>
         {/* <Click/> */}
-        <Payme/>
+        {/* <Payme/> */}
        {/* <Navbar/>
        <CarouselCards/>
        <Balls/>
@@ -51,7 +51,7 @@ export default function Home() {
        {/* <Food/> */}
        {/* <Menu/> */}
        <Fatest/>
-       <Popular/>
+       {/* <Popular/> */}
       </div>
     </>
   );

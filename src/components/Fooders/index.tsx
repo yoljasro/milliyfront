@@ -3,20 +3,20 @@ import styles from './index.module.sass';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-// Define the type for a product
-interface Product {
-  title: string;
-  desc: string;
-  price: string;
-  image: string;
-}
-
 const categories = [
   { title: "Первые блюда", image: "/assets/img/mastava.jpg" },
   { title: "Вторые блюда", image: "/assets/img/plov.jpg" },
   { title: "Салаты", image: "/assets/img/aciq.jpg" },
   { title: "Мучные изделия", image: "/assets/img/samsa.jpg" }
 ];
+
+// Define the Product type
+interface Product {
+  title: string;
+  desc: string;
+  price: string;
+  image: string;
+}
 
 const predefinedProducts: Record<string, Product[]> = {
   "Первые блюда": [
@@ -25,12 +25,28 @@ const predefinedProducts: Record<string, Product[]> = {
     { title: "Мастава", desc: "Классические Мастава", price: "15000", image: "/assets/img/mastava.jpg" },
     { title: "Мампар", desc: "Классические Мампар", price: "15000", image: "/assets/img/mampar.jpg" },
   ],
-  // Add the rest of the categories similarly...
+  "Вторые блюда": [
+    { title: "Плов", desc: "Традиционный плов", price: "20000", image: "/assets/img/plov.jpg" },
+    { title: "вагур", desc: "Традиционный вагур", price: "20000", image: "/assets/img/vaguri.jpg" },
+    { title: "норин", desc: "Традиционный норин", price: "20000", image: "/assets/img/norin.jpg" },
+  ],
+  "Салаты": [
+    { title: "Аччичук", desc: "Традиционный Аччичук", price: "20000", image: "/assets/img/aciq.jpg" },
+    { title: "Весений", desc: "Традиционный Весений", price: "20000", image: "/assets/img/bahor.jpg" },
+    { title: "Хоровац", desc: "Традиционный Хоровац", price: "20000", image: "/assets/img/xaro.jpg" },
+    { title: "Чирокчи", desc: "Традиционный Чирокчи", price: "20000", image: "/assets/img/ciroq.jpg" },
+  ],
+  "Мучные изделия": [
+    { title: "Самса с мясом", desc: "Традиционный Самса с мясом", price: "18000", image: "/assets/img/samsagosh.jpg" },
+    { title: "Самса с зеленью", desc: "Традиционный Самса с зеленью", price: "12000", image: "/assets/img/samsagreen.jpg" },
+    { title: "лепешки ", desc: "Традиционный лепешки ", price: "5000", image: "/assets/img/leposh.jpg" },
+    { title: "патыр кокандский", desc: "Традиционный патыр кокандский", price: "8000", image: "/assets/img/patir.jpg" },
+  ],
 };
 
 const Fooders: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof predefinedProducts | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]); // Use Product type here
   const [loading, setLoading] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
@@ -46,7 +62,7 @@ const Fooders: React.FC = () => {
     }, 500);
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product) => { // Use Product type here
     router.push({
       pathname: '/order',
       query: { ...product },
@@ -96,24 +112,29 @@ const Fooders: React.FC = () => {
             {loading ? (
               <p>Loading...</p>
             ) : products.length === 0 ? (
-              <p>Продукты не найдены</p>
+              <p>No products available in this category.</p>
             ) : (
-              <div className={styles.fooders__productList}>
-                {products.map((product, index) => (
-                  <div key={index} className={styles.fooders__product} onClick={() => handleAddToCart(product)}>
-                    <Image
-                      className={styles.fooders__img}
-                      src={product.image}
-                      alt={product.title}
-                      width={150}
-                      height={150}
-                    />
-                    <p className={styles.fooders__title}>{product.title}</p>
-                    <p className={styles.fooders__desc}>{product.desc}</p>
-                    <p className={styles.fooders__price}>{product.price} UZS</p>
-                  </div>
-                ))}
-              </div>
+              products.map((product, idx) => (
+                <div key={idx} className={styles.product__card}>
+                  <Image
+                    className={styles.product__img}
+                    src={product.image}
+                    alt={product.title}
+                    width={340}
+                    height={100}
+                    layout="responsive"
+                  />
+                  <p className={styles.product__title}>{product.title}</p>
+                  <p className={styles.product__desc}>{product.desc}</p>
+                  <p className={styles.product__price}>{product.price} UZS</p>
+                  <button
+                    className={styles.product__addToCart}
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              ))
             )}
           </div>
         )}

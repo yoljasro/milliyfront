@@ -23,6 +23,20 @@ export default function Home() {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
     }
+
+    // Sahifa 100% height bo'lishini ta'minlash
+    document.documentElement.style.height = "100%";
+    document.body.style.height = "100%";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+
+    // Telegram WebApp orqali kirish holati uchun CSS o'zgartirishlar
+    const mainElement = document.getElementById("mainContainer");
+    if (mainElement) {
+      mainElement.style.minHeight = "100vh";
+      mainElement.style.display = "flex";
+      mainElement.style.flexDirection = "column";
+    }
   }, []);
 
   return (
@@ -35,7 +49,14 @@ export default function Home() {
       </Head>
 
       <div
+        id="mainContainer"
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
+        style={{
+          height: "100vh",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <CarouselCards />
         <Fatest />

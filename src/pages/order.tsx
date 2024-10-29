@@ -87,7 +87,7 @@
     
       if (isNaN(totalPrice)) {
         setAlert({ open: true, message: 'Invalid total price.', severity: 'error' });
-        return; // Funksiyani to'xtatamiz
+        return;
       }
     
       const orderData: OrderData = {
@@ -116,23 +116,22 @@
         if (!response.ok) {
           throw new Error('Network response was not ok.');
         }
-        
+    
         await sendOrderToTelegram(orderData, totalPrice);
         setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
     
-        // Sahifani o'zgartirishdan oldin alertni ko'rsatish uchun bir oz kutish
         setTimeout(() => {
-          router.push('/favorite'); // Bu yerda /favorite sahifasiga o'tamiz
-        }, 1500); // Alert ko'rsatilgandan 1500 millisekund (1.5 soniya) o'tgach o'tadi.
-    
-        if (window.Telegram && window.Telegram.WebApp) {
-          const webAppClose = window.Telegram.WebApp.close;
-          if (typeof webAppClose === 'function') {
-            setTimeout(() => {
-              webAppClose();
-            }, 1500);
-          }
-        }
+          router.push({
+            pathname: '/status',
+            query: {
+              orderStatus: orderData.orderStatus,
+              totalPrice: orderData.totalPrice,
+              deliveryType: orderData.deliveryType,
+              address: orderData.address,
+              phone: orderData.phone,
+            },
+          });
+        }, 1500);
     
       } catch (error) {
         console.error('Failed to place order:', error);
@@ -293,7 +292,7 @@
             </div>
           )}
         </div>
-        <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
+         <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
           console.log('Order was successful!');
 
         }} />

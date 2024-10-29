@@ -18,7 +18,7 @@ interface Product {
 }
 
 const predefinedProducts: Record<string, Product[]> = {
- "Первые блюда": [
+  "Первые блюда": [
     { title: "Лагман", desc: "Вкусный Лагман", price: "45000", image: "/assets/img/lagmon.jpg" },
     { title: "Шурпа", desc: "Класическая Шурпа", price: "40000", image: "/assets/img/shurva.jpg" },
     { title: "Мастава", desc: "Класическая Мастава", price: "40000", image: "/assets/img/mastava.jpg" },
@@ -26,7 +26,7 @@ const predefinedProducts: Record<string, Product[]> = {
   ],
   "Вторые блюда": [
     { title: "Плов", desc: "Традиционная плов", price: "50000", image: "/assets/img/plov.jpg" },
-    { title: "вагури", desc: "Традиционная вагури", price: "550000", image: "/assets/img/vaguri.jpg" },
+    { title: "вагури", desc: "Традиционная вагури", price: "55000", image: "/assets/img/vaguri.jpg" },
     { title: "норин", desc: "Традиционная норин", price: "45000", image: "/assets/img/norin.jpg" },
   ],
   "Салаты": [
@@ -38,7 +38,7 @@ const predefinedProducts: Record<string, Product[]> = {
   "Мучные изделия": [
     { title: "Олот самса с мясом", desc: "Традиционный Олот самса с мясом", price: "18000", image: "/assets/img/samsagosh.jpg" },
     { title: "Олот самса с зеленью", desc: "Традиционный Олот самса с зеленью", price: "12000", image: "/assets/img/samsagreen.jpg" },
-    { title: "Лепешки ", desc: "Традиционный Лепешки ", price: "10000", image: "/assets/img/leposh.jpg" },
+    { title: "Лепешки", desc: "Традиционный Лепешки", price: "10000", image: "/assets/img/leposh.jpg" },
     { title: "Патыр кокандский", desc: "Традиционный Патыр кокандский", price: "10000", image: "/assets/img/patir.jpg" },
   ],
 };
@@ -48,6 +48,7 @@ const Fooders: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [cart, setCart] = useState<Record<string, number>>({});
+  const [isOrdering, setIsOrdering] = useState<boolean>(false); // New loading state for order
   const router = useRouter();
 
   const handleCategoryClick = (category: keyof typeof predefinedProducts) => {
@@ -83,9 +84,16 @@ const Fooders: React.FC = () => {
   };
 
   const handleOrder = () => {
+    setIsOrdering(true); // Set loading state to true
     const orderItems = JSON.stringify(cart);
-    localStorage.setItem('orderItems', orderItems);
-    router.push('/order');
+    // Simulate a delay for order processing (optional)
+    setTimeout(() => {
+      router.push({
+        // pathname: '/foodorder',
+        query: { orderItems }
+      });
+      setIsOrdering(false); // Reset loading state after navigation
+    }, 2000); // Change this duration as needed
   };
 
   return (
@@ -123,7 +131,7 @@ const Fooders: React.FC = () => {
             {loading ? (
               <p>Loading...</p>
             ) : products.length === 0 ? (
-              <p>No products available in this category.</p>
+              <p>No products available in this category. Try another category!</p>
             ) : (
               products.map((product, idx) => (
                 <div key={idx} className={styles.product__card}>
@@ -143,7 +151,7 @@ const Fooders: React.FC = () => {
                     onClick={() => handleAddToCart(product)}
                     aria-label={`Add ${product.title} to cart`}
                   >
-                    Add to Cart
+                    Добавить в корзину
                   </button>
                   {cart[product.title] > 0 && (
                     <div className={styles.product__counter}>
@@ -159,11 +167,12 @@ const Fooders: React.FC = () => {
         )}
       </div>
       <div className={styles.btncont}>
-      
-      {Object.keys(cart).length > 0 && (
-        <button className={styles.orderButton} onClick={handleOrder} aria-label="Proceed to order">Order</button>
-      )}
-    </div>
+        {Object.keys(cart).length > 0 && (
+          <button className={styles.orderButton} onClick={handleOrder} aria-label="Proceed to order">
+            {isOrdering ? 'Server waiting for changes...' : 'Заказ'} {/* Conditional loading text */}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

@@ -15,13 +15,13 @@ export const Click: React.FC<ClickProps> = ({ totalPrice, onSuccess }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Noyob buyurtma identifikatorini yaratish
-  function generateMerchantTransId() {
+  function generateMerchantTransId() {  
     return `order_${Date.now()}`; // Hozirgi vaqtni millisekundda olish va undan noyob identifikator yaratish
   }
 
   const handlePayment = async () => {
     try {
-      const response = await axios.post('http://localhost:9000/create-invoice', {
+      const response = await axios.post('https://backmilliy-production.up.railway.app/create-invoice', {
         amount: totalPrice,
         phoneNumber,
         merchantTransId,

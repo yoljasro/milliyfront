@@ -49,11 +49,7 @@ const Status: React.FC = () => {
     // Start progress simulation
     const totalDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
     const intervalDuration = 1000; // Update every second
-    let intervalId: NodeJS.Timeout;
-
-    let elapsed = 0;
-
-    intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       elapsed += intervalDuration;
 
       // Update the progress based on the elapsed time
@@ -70,6 +66,9 @@ const Status: React.FC = () => {
         clearInterval(intervalId); // Clear the interval once 10 minutes are up
       }
     }, intervalDuration);
+
+    // Initialize elapsed time
+    let elapsed = 0;
 
     return () => {
       clearInterval(intervalId); // Clean up the interval on unmount

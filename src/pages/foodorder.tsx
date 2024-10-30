@@ -6,10 +6,12 @@ import { Snackbar, Alert } from '@mui/material';
 import { Click } from 'components/Click';
 
 interface FoodItem {
+  id: string;
   image: string;
   title: string;
   price: string;
   desc: string;
+  quantity: number; // Quantity property added
 }
 
 interface OrderData {
@@ -26,13 +28,9 @@ interface OrderData {
   orderStatus: string;
 }
 
-interface QueryItems {
-  [key: string]: FoodItem; // Change this to only expect FoodItem
-}
-
-const OrderPage: React.FC = () => {
+const Foodorder: React.FC = () => {
   const router = useRouter();
-  const { query } = router;
+  // const { query } = router;
   const [fooders, setFooders] = useState<{ [key: string]: FoodItem }>({});
   const [deliveryType, setDeliveryType] = useState<string>('');
   const [address, setAddress] = useState<string>('');
@@ -41,13 +39,18 @@ const OrderPage: React.FC = () => {
   const [alert, setAlert] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
-    if (query.items) {
-      const items: QueryItems = JSON.parse(query.items as string);
-      console.log(items); // Check the format here
-      setFooders(items);
-    }
-  }, [query.items]);
-  
+    const lagman: FoodItem = {
+      id: '1',
+      image: '/assets/img/lagmon.jpg',
+      title: 'Лагман',
+      price: '45000',
+      desc: 'Вкусный Лагман',
+      quantity: 1, // Initialize quantity
+    };
+
+    // Har doim lagmanni ko'rsatamiz
+    setFooders({ [lagman.id]: lagman });
+  }, []);
 
   const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -57,16 +60,14 @@ const OrderPage: React.FC = () => {
   const calculateTotalPrice = () => {
     const total = Object.values(fooders).reduce((total, item) => {
       const price = parseFloat(item.price);
-      return !isNaN(price) ? total + price : total; // Don't multiply by quantity since it's a food item
+      return !isNaN(price) ? total + price * item.quantity : total; // Use quantity in calculation
     }, 0);
 
-    // Promokodni hisobga olish
     if (promocode === 'gurman') {
-      // Show the alert and apply the discount only if not already applied
       if (!alert.open) {
         setAlert({ open: true, message: 'Вы получили скидку 15%', severity: 'success' });
       }
-      return total * 0.85; // 15% discount
+      return total * 0.85;
     }
     return total;
   };
@@ -77,12 +78,12 @@ const OrderPage: React.FC = () => {
       setAlert({ open: true, message: 'Invalid total price.', severity: 'error' });
       return;
     }
-  
+
     const orderData: OrderData = {
       products: Object.entries(fooders).map(([productId, item]) => ({
         productId,
         productName: item.title,
-        quantity: 1,
+        quantity: item.quantity,
       })),
       deliveryType,
       address: deliveryType === 'доставка' ? address : '',
@@ -91,9 +92,7 @@ const OrderPage: React.FC = () => {
       paymentStatus: deliveryType === 'самовывоз' ? 'Принял' : 'unpaid',
       orderStatus: 'Принял',
     };
-  
-    console.log(orderData); // Check the orderData before sending
-  
+
     try {
       const response = await fetch('https://backmilliy-production.up.railway.app/orders', {
         method: 'POST',
@@ -102,15 +101,14 @@ const OrderPage: React.FC = () => {
         },
         body: JSON.stringify(orderData),
       });
-  
-      console.log(response); // Check the response from the backend
+
       if (!response.ok) {
         throw new Error('Network response was not ok.');
       }
-   
+
       await sendOrderToTelegram(orderData, totalPrice);
       setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
-  
+
       setTimeout(() => {
         router.push({
           pathname: '/status',
@@ -124,7 +122,6 @@ const OrderPage: React.FC = () => {
         });
       }, 1500);
     } catch (error) {
-      console.error('Failed to place order:', error);
       setAlert({ open: true, message: 'Failed to place order. Please try again.', severity: 'error' });
     }
   };
@@ -138,7 +135,7 @@ const OrderPage: React.FC = () => {
       Phone: ${orderData.phone}
       Total Price: ${totalPrice} UZS
     `;
-  
+
     try {
       await fetch('https://api.telegram.org/bot<YOUR_BOT_TOKEN>/sendMessage', {
         method: 'POST',
@@ -152,8 +149,23 @@ const OrderPage: React.FC = () => {
       console.error('Failed to send order to Telegram:', error);
     }
   };
+
   const handleCloseAlert = () => {
     setAlert({ ...alert, open: false });
+  };
+
+  const handleQuantityChange = (id: string, change: number) => {
+    setFooders(prevFooders => {
+      const currentFood = prevFooders[id];
+      if (currentFood) {
+        const newQuantity = Math.max(1, currentFood.quantity + change); // Prevent quantity from going below 1
+        return {
+          ...prevFooders,
+          [id]: { ...currentFood, quantity: newQuantity },
+        };
+      }
+      return prevFooders;
+    });
   };
 
   return (
@@ -176,9 +188,11 @@ const OrderPage: React.FC = () => {
               <div className={styles.orderItemDetails}>
                 <h3 className={styles.title}>{item.title}</h3>
                 <p className={styles.description}>{item.desc}</p>
-                <p className={styles.price}>{item.price} UZS</p>    
+                <p className={styles.price}>{item.price} UZS</p>
                 <div className={styles.counter}>
-                  <span>1</span> {/* Quantity is fixed to 1 for food items */}
+                  <button onClick={() => handleQuantityChange(item.id, -1)}>-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(item.id, 1)}>+</button>
                 </div>
               </div>
             </div>
@@ -231,50 +245,37 @@ const OrderPage: React.FC = () => {
         </div>
 
         {deliveryType === 'доставка' && (
-          <div className={styles.deliveryDetails}>
-            <label>
-              Адрес:
-              <div className={styles.inputWrapper}>
-                <img src="/assets/img/location.png" className={styles.inputIcon} />
-                <input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="Укажите адрес"
-                  className={styles.input}
-                />
-              </div>
-            </label>
-
-            <label>
-              Номер телефона:
-              <div className={styles.inputWrapper}>
-                <img src="/assets/img/phone.png" className={styles.inputIcon} />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Ваш номер телефона"
-                  className={styles.input}
-                />
-              </div>
-            </label>
+          <div className={styles.addressField}>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Ваш адрес"
+              className={styles.addressInput}
+            />
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Ваш телефон"
+              className={styles.phoneInput}
+            />
           </div>
         )}
       </div>
-      <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
-          console.log('Order was successful!');
+        <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
+            console.log('Order was successful!');
 
-        }} />
-        <button onClick={handleOrder} className={styles.submitButton}>Заказать</button>
+          }} />
+          <button onClick={handleOrder} className={styles.submitButton}>Заказать</button>
 
-        <Snackbar open={alert.open} autoHideDuration={3000} onClose={handleCloseAlert}>
-          <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>
-            {alert.message}
-          </Alert>
-        </Snackbar>
-      </div>
-    );
-  };
+          <Snackbar open={alert.open} autoHideDuration={3000} onClose={handleCloseAlert}>
+            <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{ width: '100%' }}>
+              {alert.message}
+            </Alert>
+          </Snackbar>
+        </div>
+      );
+    };
 
-  export default OrderPage;
+    export default Foodorder;

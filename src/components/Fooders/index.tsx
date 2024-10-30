@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './index.module.sass';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const categories = [
   { title: "Первые блюда", image: "/assets/img/mastava.jpg" },
@@ -43,30 +43,34 @@ const predefinedProducts: Record<string, Product[]> = {
   ],
 };
 
-const Fooders: React.FC = () => {
+export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => {
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof predefinedProducts | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [cart, setCart] = useState<Record<string, number>>({});
-  const [isOrdering, setIsOrdering] = useState<boolean>(false); // New loading state for order
-  const router = useRouter();
+
+  useEffect(() => {
+    if (selectedCategory) {
+      setLoading(true);
+      setProducts(predefinedProducts[selectedCategory]);
+      setLoading(false);
+    }
+  }, [selectedCategory]);
 
   const handleCategoryClick = (category: keyof typeof predefinedProducts) => {
     setSelectedCategory(category);
-    setLoading(true);
-    setProducts(predefinedProducts[category] || []);
-    setLoading(false);
   };
 
   const handleAddToCart = (product: Product) => {
-    setCart(prevCart => ({
+    console.log('Adding to cart:', product);
+    setCart((prevCart) => ({
       ...prevCart,
-      [product.title]: (prevCart[product.title] || 0) + 1
+      [product.title]: (prevCart[product.title] || 0) + 1,
     }));
   };
 
   const handleRemoveFromCart = (product: Product) => {
-    setCart(prevCart => {
+    setCart((prevCart) => {
       const newCart = { ...prevCart };
       if (newCart[product.title]) {
         newCart[product.title] -= 1;
@@ -83,49 +87,45 @@ const Fooders: React.FC = () => {
     setCart({});
   };
 
-  const handleOrder = () => {
-    setIsOrdering(true); // Set loading state to true
-    const orderItems = JSON.stringify(cart);
-    // Simulate a delay for order processing (optional)
-    setTimeout(() => {
-      router.push({
-        // pathname: '/foodorder',
-        query: { orderItems }
-      });
-      setIsOrdering(false); // Reset loading state after navigation
-    }, 2000); // Change this duration as needed
-  };
+  // Umumiy narxni hisoblash
+  const totalPrice = Object.keys(cart).reduce((total, title) => {
+    const product = products.find(p => p.title === title);
+    return total + (product ? parseInt(product.price) * cart[title] : 0);
+  }, 0);
 
   return (
     <div className={styles.fooders}>
       {!selectedCategory && <h1 className={styles.fooders__title}>Все каталоги</h1>}
 
       <div className={styles.fooders__cards}>
-        {!selectedCategory && categories.map((category, index) => (
-          <div
-            key={index}
-            className={styles.fooders__card}
-            onClick={() => handleCategoryClick(category.title as keyof typeof predefinedProducts)}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleCategoryClick(category.title as keyof typeof predefinedProducts)}
-            aria-label={`Select ${category.title}`}
-          >
-            <Image
-              className={styles.fooders__img}
-              src={category.image}
-              alt={category.title}
-              width={270}
-              height={180}
-            />
-            <p className={styles.fooders__title}>{category.title}</p>
-          </div>
-        ))}
+        {!selectedCategory &&
+          categories.map((category, index) => (
+            <div
+              key={index}
+              className={styles.fooders__card}
+              onClick={() => handleCategoryClick(category.title as keyof typeof predefinedProducts)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && handleCategoryClick(category.title as keyof typeof predefinedProducts)}
+              aria-label={`Select ${category.title}`}
+            >
+              <Image
+                className={styles.fooders__img}
+                src={category.image}
+                alt={category.title}
+                width={270}
+                height={180}
+              />
+              <p className={styles.fooders__title}>{category.title}</p>
+            </div>
+          ))}
 
         {selectedCategory && (
           <div className={styles.fooders__products}>
             <div>
-              <button className={styles.fooders__backBtn} onClick={handleBackToCategories} aria-label="Back to categories">Назад</button>
+              <button className={styles.fooders__backBtn} onClick={handleBackToCategories} aria-label="Back to categories">
+                Назад
+              </button>
               <h2 className={styles.fooders__title}>{selectedCategory}</h2>
             </div>
             {loading ? (
@@ -166,15 +166,22 @@ const Fooders: React.FC = () => {
           </div>
         )}
       </div>
-      <div className={styles.btncont}>
-        {Object.keys(cart).length > 0 && (
-          <button className={styles.orderButton} onClick={handleOrder} aria-label="Proceed to order">
-            {isOrdering ? 'Server waiting for changes...' : 'Заказ'} {/* Conditional loading text */}
-          </button>
-        )}
-      </div>
+
+      <Link
+        href={{
+          pathname: '/foodorder',
+          query: { items: JSON.stringify(cart), total: totalPrice },
+        }}
+      >
+        <div className={styles.btncont}>
+          {Object.keys(cart).length > 0 && (
+            <button className={styles.orderButton}>
+              Заказ
+            </button>
+          )}
+        </div>
+      </Link>
     </div>
   );
 };
 
-export default Fooders;

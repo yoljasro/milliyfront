@@ -37,8 +37,8 @@ export const Click: React.FC<ClickProps> = ({ totalPrice, onSuccess }) => {
 
   return (
     <div style={{ padding: '20px', color: "black" }} className={styles.click}>
-      <h1>Оплата </h1>
-      <p>Цена: <span>{totalPrice} UZS</span></p>
+      <h1 className={styles.title}>Оплата </h1>
+      <p className={styles.price}>Цена: <span>{totalPrice} UZS</span></p>
      <Image  onClick={handlePayment} src='/assets/img/click.png' alt='clickimage' width={180} height={180}/>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>

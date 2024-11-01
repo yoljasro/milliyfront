@@ -4,6 +4,8 @@
   import styles from '../styles/order.module.sass';
   import { Snackbar, Alert } from '@mui/material';
   import { Click } from 'components/Click';
+  import { FaLocationDot } from "react-icons/fa6";
+  import { FaPhone } from "react-icons/fa6";
 
   interface CartItem {
     quantity: number;
@@ -32,12 +34,14 @@
     [key: string]: CartItem;
   }
 
+
   const OrderPage: React.FC = () => {
     const router = useRouter();
     const { query } = router;
     const [cartItems, setCartItems] = useState<{ [key: string]: CartItem }>({});
     const [deliveryType, setDeliveryType] = useState<string>(''); 
     const [address, setAddress] = useState<string>(''); 
+    const [ paymentType , setPaymentType] = useState<string>('')
     const [phone, setPhone] = useState('+998');
     const [promocode, setPromocode] = useState<string>(''); // Promokod uchun holat
     const [alert, setAlert] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({ open: false, message: '', severity: 'success' });
@@ -87,7 +91,12 @@
     
       if (isNaN(totalPrice)) {
         setAlert({ open: true, message: 'Invalid total price.', severity: 'error' });
-        return;
+        return; // Stop the function
+      }
+    
+      if (!paymentType) {
+        setAlert({ open: true, message: 'Выберите способ оплаты.', severity: 'error' });
+        return; // Prevent submission if paymentType is not selected
       }
     
       const orderData: OrderData = {
@@ -121,22 +130,26 @@
         setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
     
         setTimeout(() => {
-          router.push({
-            pathname: '/status',
-            query: {
-              orderStatus: orderData.orderStatus,
-              totalPrice: orderData.totalPrice,
-              deliveryType: orderData.deliveryType,
-              address: orderData.address,
-              phone: orderData.phone,
-            },
-          });
+          router.push('/status');
         }, 1500);
+    
+        if (window.Telegram && window.Telegram.WebApp) {
+          const webAppClose = window.Telegram.WebApp.close;
+          if (typeof webAppClose === 'function') {
+            setTimeout(() => {
+              webAppClose();
+            }, 1500);
+          }
+        }
     
       } catch (error) {
         console.error('Failed to place order:', error);
         setAlert({ open: true, message: 'Failed to place order. Please try again.', severity: 'error' });
       }
+    };
+
+    const handlePaymentTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPaymentType(e.target.value);
     };
 
     const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
@@ -266,9 +279,9 @@
           {deliveryType === 'доставка' && (
             <div className={styles.deliveryDetails}>
               <label>
-                Адрес:
+                {/* Адрес: */}
                 <div className={styles.inputWrapper}>
-                  <img src="/assets/img/location.png" className={styles.inputIcon} />
+                <FaLocationDot className={styles.inputIcon}/> 
                   <input
                     type="text"
                     value={address}
@@ -278,9 +291,9 @@
                 </div>
               </label>
               <label>
-                Телефон:
+                {/* Телефон: */}
                 <div className={styles.inputWrapper}>
-                  <img src="/assets/img/phone.png" className={styles.inputIcon} />
+                <FaPhone className={styles.inputIcon}/> 
                   <input
                     type="tel"
                     value={phone}
@@ -292,10 +305,22 @@
             </div>
           )}
         </div>
-         <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => {
-          console.log('Order was successful!');
+        <div className={styles.paymentOptionContainer}>
+        
+        <label className={`${styles.paymentLabel} ${paymentType === 'Наличные' ? styles.active : ''}`}>
+          <input
+            type="radio"
+            value="Наличные"
+            className={styles.cashinput }
+            checked={paymentType === 'Наличные'}
+            onChange={handlePaymentTypeChange}
+          />
+          Наличные
+        </label>
 
-        }} />
+        <Click totalPrice={calculateTotalPrice()} onClick={handleOrder} onSuccess={() => console.log('Order was successful!')} />
+
+      </div>
         <button onClick={handleOrder} className={styles.submitButton}>Заказать</button>
 
         <Snackbar open={alert.open} autoHideDuration={6000} onClose={handleCloseAlert}>

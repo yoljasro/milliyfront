@@ -1,6 +1,5 @@
 // import { Categories } from 'components/Categories';
 import {Fooders}  from 'components/Fooders';
-import Products from 'components/Products';
 import React from 'react';
 // import { Categories } from '@/';
 // import styles from './index.module.css';
@@ -8,9 +7,9 @@ import React from 'react';
 
 const Foods: React.FC = () => {
     return (
-        <div>
+        <div>                                                           
             {/* <Categories/> */}
-            <Fooders addToCart={Products}/>
+            <Fooders    />
         </div>
     );
 };

@@ -17,6 +17,13 @@ interface Product {
   image: string;
 }
 
+interface CartItem {
+  title: string;
+  price: string;
+  image: string;
+  quantity: number;
+}
+
 const predefinedProducts: Record<string, Product[]> = {
   "Первые блюда": [
     { title: "Лагман", desc: "Вкусный Лагман", price: "45000", image: "/assets/img/lagmon.jpg" },
@@ -43,11 +50,17 @@ const predefinedProducts: Record<string, Product[]> = {
   ],
 };
 
-export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => {
+export const Fooders: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof predefinedProducts | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [cart, setCart] = useState<Record<string, number>>({});
+  const [cart, setCart] = useState<Record<string, CartItem>>(() => {
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : {};
+    }
+    return {};
+  });
 
   useEffect(() => {
     if (selectedCategory) {
@@ -57,28 +70,41 @@ export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => 
     }
   }, [selectedCategory]);
 
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   const handleCategoryClick = (category: keyof typeof predefinedProducts) => {
     setSelectedCategory(category);
   };
 
   const handleAddToCart = (product: Product) => {
-    console.log('Adding to cart:', product);
-    setCart((prevCart) => ({
-      ...prevCart,
-      [product.title]: (prevCart[product.title] || 0) + 1,
-    }));
+    setCart((prevCart) => {
+      const updatedCart = {
+        ...prevCart,
+        [product.title]: {
+          title: product.title,
+          price: product.price,
+          image: product.image,
+          quantity: (prevCart[product.title]?.quantity || 0) + 1,
+        },
+      };
+      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Store updated cart in localStorage
+      return updatedCart;
+    });
   };
-
+  
   const handleRemoveFromCart = (product: Product) => {
     setCart((prevCart) => {
-      const newCart = { ...prevCart };
-      if (newCart[product.title]) {
-        newCart[product.title] -= 1;
-        if (newCart[product.title] === 0) {
-          delete newCart[product.title];
+      const updatedCart = { ...prevCart };
+      if (updatedCart[product.title]?.quantity) {
+        updatedCart[product.title].quantity -= 1;
+        if (updatedCart[product.title].quantity === 0) {
+          delete updatedCart[product.title];
         }
       }
-      return newCart;
+      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Store updated cart in localStorage
+      return updatedCart;
     });
   };
 
@@ -87,10 +113,9 @@ export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => 
     setCart({});
   };
 
-  // Umumiy narxni hisoblash
   const totalPrice = Object.keys(cart).reduce((total, title) => {
-    const product = products.find(p => p.title === title);
-    return total + (product ? parseInt(product.price) * cart[title] : 0);
+    const item = cart[title];
+    return total + parseInt(item.price) * item.quantity;
   }, 0);
 
   return (
@@ -153,10 +178,10 @@ export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => 
                   >
                     Добавить в корзину
                   </button>
-                  {cart[product.title] > 0 && (
+                  {cart[product.title]?.quantity > 0 && (
                     <div className={styles.product__counter}>
                       <button onClick={() => handleRemoveFromCart(product)}>-</button>
-                      <span>{cart[product.title]}</span>
+                      <span>{cart[product.title].quantity}</span>
                       <button onClick={() => handleAddToCart(product)}>+</button>
                     </div>
                   )}
@@ -184,4 +209,3 @@ export const Fooders: React.FC<{ addToCart: (item: Product) => void; }> = () => 
     </div>
   );
 };
-

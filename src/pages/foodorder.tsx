@@ -87,6 +87,35 @@ const Foodorder: React.FC = () => {
     setPaymentType(e.target.value);
   };
 
+  // Function to send order data to the Telegram bot
+  const sendToTelegram = async (orderData: OrderData) => {
+    const message = `
+      Новый заказ:
+      - Заказанные продукты: ${orderData.products.map(item => `${item.productName} (кол-во: ${item.quantity})`).join(', ')}
+      - Способ доставки: ${orderData.deliveryType}
+      - Адрес: ${orderData.address}
+      - Телефон: ${orderData.phone}
+      - Общая сумма: ${orderData.totalPrice} UZS
+    `;
+
+    const chatId = '8157570693'; // Replace with your chat ID
+    const botToken = '8157570693:AAH5IzcmAEZ89E9LZ5deg2AlNX5c7exS_uw'; // Replace with your bot token
+
+    try {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: "HTML",
+        }),
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+    }
+  };
+
   const handleOrder = async () => {
     if (!paymentType) {
       setAlert({
@@ -144,6 +173,9 @@ const Foodorder: React.FC = () => {
         throw new Error("Network response was not ok.");
       }
 
+      // Send order data to Telegram bot
+      await sendToTelegram(orderData);
+
       setAlert({
         open: true,
         message: "Ваш заказ успешно оформлен!",
@@ -192,6 +224,7 @@ const Foodorder: React.FC = () => {
   const handleCloseAlert = () => {
     setAlert({ ...alert, open: false });
   };
+
   return (
     <div className={styles.orderPage}>
       <h2 className={styles.name}>Ваш заказ</h2>

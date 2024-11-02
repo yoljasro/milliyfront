@@ -54,13 +54,15 @@ export const Fooders: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<keyof typeof predefinedProducts | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [cart, setCart] = useState<Record<string, CartItem>>(() => {
-    if (typeof window !== "undefined") {
-      const savedCart = localStorage.getItem("cart");
-      return savedCart ? JSON.parse(savedCart) : {};
+  const [cart, setCart] = useState<Record<string, CartItem>>({});
+
+  useEffect(() => {
+    // Load cart from localStorage on client-side only
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
     }
-    return {};
-  });
+  }, []);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -71,6 +73,7 @@ export const Fooders: React.FC = () => {
   }, [selectedCategory]);
 
   useEffect(() => {
+    // Update localStorage whenever the cart changes
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
@@ -89,11 +92,10 @@ export const Fooders: React.FC = () => {
           quantity: (prevCart[product.title]?.quantity || 0) + 1,
         },
       };
-      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Store updated cart in localStorage
       return updatedCart;
     });
   };
-  
+
   const handleRemoveFromCart = (product: Product) => {
     setCart((prevCart) => {
       const updatedCart = { ...prevCart };
@@ -103,14 +105,12 @@ export const Fooders: React.FC = () => {
           delete updatedCart[product.title];
         }
       }
-      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Store updated cart in localStorage
       return updatedCart;
     });
   };
 
   const handleBackToCategories = () => {
     setSelectedCategory(null);
-    setCart({});
   };
 
   const totalPrice = Object.keys(cart).reduce((total, title) => {

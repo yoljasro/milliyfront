@@ -21,7 +21,7 @@ const Status: React.FC = () => {
   };
 
   // Function to fetch initial order status
-  const fetchOrderStatus = async () => {
+   const fetchOrderStatus = async () => {
     if (orderId) {
       try {
         const response = await axios.get(`https://backmilliy-production.up.railway.app/api/orders/${orderId}`); // Adjust API endpoint accordingly

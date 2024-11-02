@@ -35,7 +35,6 @@ const Status: React.FC = () => {
   };
 
   useEffect(() => {
-    // Fetch order status when orderId is available
     fetchOrderStatus();
 
     // Listen for order status updates from the server
@@ -46,33 +45,9 @@ const Status: React.FC = () => {
       }
     });
 
-    // Start progress simulation
-    const totalDuration = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const intervalDuration = 1000; // Update every second
-    const intervalId = setInterval(() => {
-      elapsed += intervalDuration;
-
-      // Update the progress based on the elapsed time
-      if (elapsed < totalDuration * 0.33) {
-        setOrderStatus("Принял");
-        setProgress(33);
-      } else if (elapsed < totalDuration * 0.66) {
-        setOrderStatus("Подготовка");
-        setProgress(66);
-      } else if (elapsed < totalDuration) {
-        setOrderStatus("Готовый");
-        setProgress(100);
-      } else {
-        clearInterval(intervalId); // Clear the interval once 10 minutes are up
-      }
-    }, intervalDuration);
-
-    // Initialize elapsed time
-    let elapsed = 0;
-
+    // Clean up the listener on unmount
     return () => {
-      clearInterval(intervalId); // Clean up the interval on unmount
-      socket.off('order-status-update'); // Clean up the listener on unmount
+      socket.off('order-status-update');
     };
   }, [orderId]);
 

@@ -105,12 +105,12 @@
             productName: item.product.title,
             quantity: item.quantity,
           })),
-          deliveryType,
+          deliveryType,                                                                                       
           address: deliveryType === 'доставка' ? address : '',
           phone: deliveryType === 'доставка' ? phone : '',
           totalPrice: totalPrice,
           paymentStatus: deliveryType === 'самовывоз' ? 'Принял' : 'unpaid',
-          orderStatus: 'Принял',
+          orderStatus: 'Принял',  
         };
       
         try {

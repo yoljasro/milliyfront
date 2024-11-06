@@ -126,7 +126,7 @@
             throw new Error('Network response was not ok.');
           }
       
-          await sendOrderToTelegram(orderData, totalPrice);
+          // await sendOrderToTelegram(orderData, totalPrice);
           setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
       
           setTimeout(() => {
@@ -152,30 +152,30 @@
         setPaymentType(e.target.value);
       };
 
-      const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
-        const telegramMessage = {
-          chat_id: '7965465294',
-          text: `Получен новый заказ:\n\nТовары:\n${orderData.products
-            .map(item => `${item.productName} - ${item.quantity}`)
-            .join('\n')}\n\nОбщая стоимость: ${totalPrice} сум\nСтатус заказа: ${orderData.orderStatus}`,
-        };
+      // const sendOrderToTelegram = async (orderData: OrderData, totalPrice: number) => {
+      //   const telegramMessage = {
+      //     chat_id: '8157570693',
+      //     text: `Получен новый заказ:\n\nТовары:\n${orderData.products
+      //       .map(item => `${item.productName} - ${item.quantity}`)
+      //       .join('\n')}\n\nОбщая стоимость: ${totalPrice} сум\nСтатус заказа: ${orderData.orderStatus}`,
+      //   };
 
-        try {
-          const response = await fetch('https://api.telegram.org/bot7965465294:AAF2cKY7yoDVG80hySTK6bcwQocoX3BO9-U/sendMessage', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(telegramMessage),
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to send message to Telegram');
-          }
-        } catch (error) {
-          console.error('Error sending message to Telegram:', error);
-        }
-      };
+      //   try {
+      //     const response = await fetch('https://api.telegram.org/bot/sendMessage', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify(telegramMessage),
+      //     });
+ 
+      //     if (!response.ok) {
+      //       throw new Error('Failed to send message to Telegram');
+      //     }
+      //   } catch (error) {
+      //     console.error('Error sending message to Telegram:', error);
+      //   }
+      // };
 
       const handleCloseAlert = () => {
         setAlert({ ...alert, open: false });

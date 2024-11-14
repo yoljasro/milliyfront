@@ -199,7 +199,7 @@ const Profile: React.FC = () => {
                 ) : (
                     <>
                         {!showDashboard && !isEditing && (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center", alignContent: 'center', alignItems: "center", gap: 2, mt: 3, padding: "20px", height: "500px", background: '#fff', borderRadius: "12px" , boxShadow: "10px 10px 5px lightblue" }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center", width: "370px", alignContent: 'center', alignItems: "center", gap: 2, mt: 3, padding: "20px", height: "500px", background: '#fff', borderRadius: "12px" , boxShadow: "10px 10px 5px lightblue" }}>
                                 <StyledTextField
                                     className={styles.input}
                                     label="Ваше имя"

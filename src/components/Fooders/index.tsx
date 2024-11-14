@@ -6,6 +6,7 @@ import Link from 'next/link';
 const categories = [
   { title: "Первые блюда", image: "/assets/img/mastava.jpg" },
   { title: "Вторые блюда", image: "/assets/img/plov.jpg" },
+  { title: "Шашлыки", image: "/assets/img/shashlik.jpg" },
   { title: "Салаты", image: "/assets/img/aciq.jpg" },
   { title: "Мучные изделия", image: "/assets/img/samsa.jpg" }
 ];
@@ -36,6 +37,14 @@ const predefinedProducts: Record<string, Product[]> = {
     { title: "вагури", desc: "Традиционная вагури", price: "55000", image: "/assets/img/vaguri.jpg" },
     { title: "норин", desc: "Традиционная норин", price: "45000", image: "/assets/img/norin.jpg" },
   ],
+
+  "Шашлыки": [
+    { title: "Шашлык бараний кусковой", desc: "Вкусный Шашлык бараний кусковой", price: "27000", image: "/assets/img/qoy.jpg" },
+    { title: "Шашлык говяжий кусковой", desc: "Класическая Шашлык говяжий кусковой", price: "27000", image: "/assets/img/mol.jpg" },
+    { title: "Шашлык из куриных крыльев", desc: "Класическая Шашлык из куриных крыльев", price: "26000", image: "/assets/img/shashlik2.jpg" },
+    { title: "Шашлык молотый", desc: "Класическая Шашлык молотый", price: "25000", image: "/assets/img/shashlik.jpg" },
+  ],
+
   "Салаты": [
     { title: "Аччичук", desc: "Традиционная Аччичук", price: "30000", image: "/assets/img/aciq.jpg" },
     { title: "Весенний", desc: "Традиционная Весений", price: "30000", image: "/assets/img/bahor.jpg" },
@@ -140,6 +149,7 @@ export const Fooders: React.FC = () => {
                 alt={category.title}
                 width={270}
                 height={180}
+              // layout='responsive'
               />
               <p className={styles.fooders__title}>{category.title}</p>
             </div>

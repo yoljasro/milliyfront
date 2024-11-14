@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styles from './index.module.sass';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router'; // Router import qilish
+import { useRouter } from 'next/router';
+import { MdOutlineRestaurantMenu } from "react-icons/md";
 
 export const Menu: React.FC = () => {
-  const [activeMenu, setActiveMenu] = useState<string>('discover'); // Default active menu
-  const router = useRouter(); // Router hooki
+  const [activeMenu, setActiveMenu] = useState<string>('discover');
+  const router = useRouter();
 
   useEffect(() => {
-    // Router query parametrlariga qarab aktiv menyuni o'rnatish
     const path = router.pathname;
     if (path === '/') {
       setActiveMenu('discover');
@@ -17,6 +17,8 @@ export const Menu: React.FC = () => {
       setActiveMenu('food');
     } else if (path === '/search') {
       setActiveMenu('search');
+    } else if (path === '/profile') {
+      setActiveMenu('profiles');
     } else if (path === '/favorite') {
       setActiveMenu('favorites');
     }
@@ -30,12 +32,9 @@ export const Menu: React.FC = () => {
             className={`${styles.menu__items} ${activeMenu === 'discover' ? styles.active : ''}`}
             onClick={() => setActiveMenu('discover')}
           >
-            <Image
-              src={'/assets/img/restasvg.svg'}
-              alt='discover'
-              width={24}
-              height={24}
-              className={activeMenu === 'discover' ? styles.activeImage : ''}
+            <MdOutlineRestaurantMenu
+              size={24} 
+              className={`${styles.menu__icon} ${activeMenu === 'discover' ? styles.activeIcon : ''}`}
             />
             <p className={`${styles.menu__titleone} ${activeMenu === 'discover' ? styles.activeText : ''}`}>
               Каталог
@@ -47,6 +46,7 @@ export const Menu: React.FC = () => {
             className={`${styles.menu__items} ${activeMenu === 'food' ? styles.active : ''}`}
             onClick={() => setActiveMenu('food')}
           >
+
             <Image
               src={'/assets/img/discover.svg'}
               alt='food'
@@ -75,6 +75,26 @@ export const Menu: React.FC = () => {
             />
             <p className={`${styles.menu__title} ${activeMenu === 'favorites' ? styles.activeText : ''}`}>
               Любимый
+            </p>
+          </div>
+        </Link>
+
+
+        <Link href={'/profile'}>
+          <div
+            className={`${styles.menu__itemss} ${styles.heart} ${activeMenu === 'profiles' ? styles.active : ''}`}
+            onClick={() => setActiveMenu('profiles')}
+          >
+            <Image
+              src={'/assets/img/profiles.svg'}
+              alt='profiles'
+              width={24}
+              height={24}
+              className={activeMenu === 'profiles' ? styles.activeImage : ''}
+              style={{ position: 'relative', left: "13px" }} // 20px o'ngga joylashtirish
+            />
+            <p className={`${styles.menu__title} ${activeMenu === 'profiles' ? styles.activeText : ''}`}>
+              Профиль
             </p>
           </div>
         </Link>

@@ -35,7 +35,7 @@ const Food: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:9000/products');
+        const response = await axios.get('https://backmilliy-production.up.railway.app/products');
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -77,7 +77,7 @@ const Food: React.FC = () => {
     if (!order) return;
 
     try {
-      const response = await axios.post('http://localhost:9000/orders', order);
+      const response = await axios.post('https://backmilliy-production.up.railway.app/orders', order);
       console.log('Order response:', response.data);
       setOrderSent(true);
       // Send order details to Telegram bot
@@ -96,7 +96,7 @@ const Food: React.FC = () => {
       axios.post('https://api.click.uz/payments', {
         amount: 299.99, // Adjust this amount as needed
         description: 'Test payment',
-        callback_url: 'http://localhost:9000/orders',
+        callback_url: 'https://backmilliy-production.up.railway.app/orders',
         test: true
       })
       .then((response) => {
@@ -123,7 +123,7 @@ const Food: React.FC = () => {
             return product ? (
               <li key={p.productId} className={styles.orderItem}>
                 <Image
-                  src={`http://localhost:9000${product.image.replace(/\\/g, '/')}`}
+                  src={`https://backmilliy-production.up.railway.app${product.image.replace(/\\/g, '/')}`}
                   alt={product.title}
                   className={styles.orderImage}
                 />
@@ -231,7 +231,7 @@ const Food: React.FC = () => {
       <div className={styles.productCard} key={product._id}>
         <Image
           className={styles.productImage}
-          src={`http://localhost:9000${product.image.replace(/\\/g, '/')}`}
+          src={`https://backmilliy-production.up.railway.app${product.image.replace(/\\/g, '/')}`}
           alt={product.title}
         />
         <div className={styles.productInfo}>

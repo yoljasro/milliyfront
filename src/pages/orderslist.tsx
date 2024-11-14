@@ -22,7 +22,7 @@ const OrderList: React.FC = () => {
   // Fetch actual product details from server in a real application
   const fetchProductDetails = async (productIds: string[]) => {
     try {
-      const response = await fetch('http://localhost:9000/products', {
+      const response = await fetch('https://backmilliy-production.up.railway.app/products', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

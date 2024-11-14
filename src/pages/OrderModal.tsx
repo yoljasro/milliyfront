@@ -29,7 +29,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ isOpen, onClose, orderData }) =
     if (isOpen && orderData) {
       const fetchOrderDetails = async () => {
         try {
-          const response = await fetch(`http://localhost:9000/orders/${orderData.orderId}`);
+          const response = await fetch(`https://backmilliy-production.up.railway.app/orders/${orderData.orderId}`);
           const data: OrderData = await response.json();
           if (response.ok) {
             setCurrentOrderData(data);

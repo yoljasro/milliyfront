@@ -18,6 +18,8 @@ interface CartItem {
   product: Product;
 }
 
+
+
 const Fatest: React.FC = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [cart, setCart] = useState<{ [key: string]: CartItem }>({});
@@ -134,7 +136,7 @@ const Fatest: React.FC = () => {
   const hasItemsInCart = Object.values(cart).some(item => item.quantity > 0);
 
   return (
-    <div className={styles.fatest}>
+    <div className={styles.fatest} >
       <div className={styles.fatest__cont}>
         <div className={styles.fatest__content}>
           <p>Быстрая доставка 🔥</p>

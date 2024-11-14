@@ -60,7 +60,7 @@
 
         if (window.Telegram && window.Telegram.WebApp) {
           window.Telegram.WebApp.ready();
-        }
+        } 
       }, [query.items]);
 
       const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,12 +91,12 @@
       
         if (isNaN(totalPrice)) {
           setAlert({ open: true, message: 'Invalid total price.', severity: 'error' });
-          return; // Stop the function
+          return;
         }
       
         if (!paymentType) {
           setAlert({ open: true, message: 'Выберите способ оплаты.', severity: 'error' });
-          return; // Prevent submission if paymentType is not selected
+          return;
         }
       
         const orderData: OrderData = {
@@ -105,12 +105,12 @@
             productName: item.product.title,
             quantity: item.quantity,
           })),
-          deliveryType,                                                                                       
+          deliveryType,
           address: deliveryType === 'доставка' ? address : '',
           phone: deliveryType === 'доставка' ? phone : '',
           totalPrice: totalPrice,
           paymentStatus: deliveryType === 'самовывоз' ? 'Принял' : 'unpaid',
-          orderStatus: 'Принял',  
+          orderStatus: 'Принял', // initial status
         };
       
         try {
@@ -126,11 +126,16 @@
             throw new Error('Network response was not ok.');
           }
       
-          // await sendOrderToTelegram(orderData, totalPrice);
-          setAlert({ open: true, message: 'Your order has been placed successfully!', severity: 'success' });
+          const result = await response.json();
+          const orderId = result.orderId; // Assuming the server response includes the `orderId`
+      
+          setAlert({ open: true, message: 'Ваш заказ успешно оформлен!', severity: 'success' });
       
           setTimeout(() => {
-            router.push('/status');
+            router.push({
+              pathname: '/status',
+              query: { orderId }, // Pass the orderId instead of orderStatus
+            });
           }, 1500);
       
           if (window.Telegram && window.Telegram.WebApp) {
@@ -141,12 +146,12 @@
               }, 1500);
             }
           }
-      
         } catch (error) {
-          console.error('Failed to place order:', error);
-          setAlert({ open: true, message: 'Failed to place order. Please try again.', severity: 'error' });
+          console.error('Не удалось разместить заказ:', error);
+          setAlert({ open: true, message: 'Не удалось разместить заказ. Попробуйте еще раз.', severity: 'error' });
         }
       };
+      
 
       const handlePaymentTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPaymentType(e.target.value);
@@ -193,8 +198,8 @@
             return {
               ...prevItems,
               [id]: { ...currentItem, quantity: currentItem.quantity - 1 },
-            };
-          }
+              };
+            }
           return prevItems;
         });
       };

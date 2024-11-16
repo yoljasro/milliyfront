@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styles from './index.module.sass'; // CSS modullarni o'z faylingizga moslang
+import { PuffLoader } from 'react-spinners'
+import styles from './index.module.sass';
+import { Spinner } from "react-bootstrap";
+import ProgressBar from '../ProgressBar'; // Progress barni import qilish
 
 interface Banner {
   _id: string;
@@ -12,14 +15,15 @@ interface Banner {
 
 const CarouselCards: React.FC = () => {
   const [banners, setBanners] = useState<Banner[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [progress, setProgress] = useState(0); // Progress holatini saqlash
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
         const response = await fetch("https://backmilliy-production.up.railway.app/banners");
         const data: Banner[] = await response.json();
-        
-        // Rasm URL-larini to'liq URL ga aylantirish
+
         const updatedBanners = data.map(banner => ({
           ...banner,
           image: `https://backmilliy-production.up.railway.app${banner.image}`
@@ -28,10 +32,22 @@ const CarouselCards: React.FC = () => {
         setBanners(updatedBanners);
       } catch (error) {
         console.error("Error fetching banners:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBanners();
+    
+    // Progress barni yangilash
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress < 100) return prevProgress + 10;
+        clearInterval(interval);
+        return 100;
+      });
+    }, 500); // 500 ms da 10% dan oshirish
+
   }, []);
 
   const settings = {
@@ -54,19 +70,28 @@ const CarouselCards: React.FC = () => {
 
   return (
     <div className={styles.carouselContainer}>
-      <Slider {...settings}>
-        {banners.map((banner) => (
-          <div key={banner._id} className={styles.card} onClick={() => handleCardClick(banner.link)}>
+      {loading ? (
+       <div className={styles.carouselContainer__loader}>
+       <PuffLoader color="#ff7d1a" size={100} />
+       <p className={styles.carouselContainer__load}>Загрузка...</p>
+       <ProgressBar progress={progress} /> {/* Progress barni yuklash jarayonida ko'rsatish */}
+     </div>
+      ) : (
+        <Slider {...settings}>
+          {banners.map((banner) => (
             <div
-              className={styles.cardContent}
-              style={{ backgroundImage: `url(${banner.image})` }}
+              key={banner._id}
+              className={`${styles.card} ${styles.cardAnimation}`}
+              onClick={() => handleCardClick(banner.link)}
             >
-              {/* Agar sizga rasm ustida matn ko'rsatish kerak bo'lsa, bu yerga qo'shishingiz mumkin */}
-              {/* <div className={styles.title}>{banner.title}</div> */}
+              <div
+                className={styles.cardContent}
+                style={{ backgroundImage: `url(${banner.image})` }}
+              ></div>
             </div>
-          </div>
-        ))}
-      </Slider>
+          ))}
+        </Slider>
+      )}
     </div>
   );
 };

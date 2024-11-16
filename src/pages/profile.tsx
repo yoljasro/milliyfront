@@ -50,12 +50,13 @@ interface ProfileData {
     date: string;
     number: string;
     status: string;
+    balls: number; // New field for tracking points
     // id: string;
     createdAt?: string;
 }
 
 const Profile: React.FC = () => {
-    const [profile, setProfile] = useState<ProfileData>({ name: '', date: '', number: '', status: 'Новичок', createdAt: '' });
+    const [profile, setProfile] = useState<ProfileData>({ name: '', date: '', number: '', status: 'Новичок', balls: 0, createdAt: '' });
     const [loading, setLoading] = useState<boolean>(false);
     const [snackbar, setSnackbar] = useState<{ message: string, severity: 'success' | 'error' | undefined, open: boolean }>({ message: '', severity: undefined, open: false });
     const [showDashboard, setShowDashboard] = useState<boolean>(false);
@@ -100,21 +101,22 @@ const Profile: React.FC = () => {
             setSnackbar({ message: 'Все поля должны быть заполнены.', severity: 'error', open: true });
             return;
         }
-
+    
         setLoading(true);
         try {
             const payload = {
                 ...profile,
+                balls: profile.balls + 10, // Increment balls by 10 (for example)
                 number: profile.number.replace(/[^0-9+]/g, ''),
                 createdAt: profile.createdAt || new Date().toISOString(),
             };
-
+    
             const response = await axios.post('https://backmilliy-production.up.railway.app/profiles', payload);
             if (response.status === 201) {
                 setSnackbar({ message: 'Профиль успешно создан!', severity: 'success', open: true });
                 setShowDashboard(true);
                 localStorage.setItem('profile', JSON.stringify(payload));
-                setProfile({ name: '', date: '', number: '', status: 'Новичок', createdAt: '' });
+                setProfile({ name: '', date: '', number: '', status: 'Новичок', balls: profile.balls + 10, createdAt: '' });
             }
         } catch (error) {
             setSnackbar({ message: 'Ошибка при сохранении профиля.', severity: 'error', open: true });
@@ -162,7 +164,7 @@ const Profile: React.FC = () => {
 
     const handleDeleteProfile = () => {
         localStorage.removeItem('profile');
-        setProfile({ name: '', date: '', number: '', status: 'Новичок', createdAt: '' });
+        setProfile({ name: '', date: '', number: '', status: 'Новичок', balls: 0, createdAt: '' });
         setSnackbar({ message: 'Профиль удален.', severity: 'success', open: true });
         setShowDashboard(false);
     };
@@ -170,12 +172,12 @@ const Profile: React.FC = () => {
     const handleSwitchProfile = () => {
         // Profilni tozalash va yangi profil tanlash uchun localStorage ni o'chirish
         localStorage.removeItem('profile');
-        setProfile({ name: '', date: '', number: '', status: 'Новичок', createdAt: '' });
+        setProfile({ name: '', date: '', number: '', status: 'Новичок', balls: 0, createdAt: '' });
         setSnackbar({ message: 'Выберите новый профиль.', severity: 'success', open: true });
         setShowDashboard(false);
     };
 
-  
+
     return (
         <Container maxWidth="sm" sx={{ mt: 0, position: 'relative', animation: `${fadeIn} 0.6s ease-out` }} className={styles.cont}>
             <Box sx={{ textAlign: 'center', mb: 3 }}>
@@ -199,7 +201,7 @@ const Profile: React.FC = () => {
                 ) : (
                     <>
                         {!showDashboard && !isEditing && (
-                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center", width: "370px", alignContent: 'center', alignItems: "center", gap: 2, mt: 3, padding: "20px", height: "500px", background: '#fff', borderRadius: "12px" , boxShadow: "10px 10px 5px lightblue" }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: "center", width: "370px", alignContent: 'center', alignItems: "center", gap: 2, mt: 3, padding: "20px", height: "500px", background: '#fff', borderRadius: "12px", boxShadow: "10px 10px 5px lightblue" }}>
                                 <StyledTextField
                                     className={styles.input}
                                     label="Ваше имя"
@@ -264,15 +266,16 @@ const Profile: React.FC = () => {
                                             height: '70px',
                                             backgroundColor: 'white',
                                             borderRadius: '10px',
-                                            color: 'red',
+                                            color: 'black',
                                             textAlign: "center",
                                             display: 'flex',
                                             justifyContent: "center",
                                             alignItems: 'center',
-                                            fontSize: '18px'
+                                            fontSize: '18px',
+                                            
                                         }}
                                     >
-                                        1
+                                        {profile.balls} {/* Display current balls */}
                                     </Box>
 
                                 </Box>
@@ -284,7 +287,7 @@ const Profile: React.FC = () => {
                 {showDashboard && (
                     <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
                         <IconButton onClick={handleSettingsClick}>
-                            <MenuItem sx={{ marginLeft: 0 }}> Jasur</MenuItem>
+                            <MenuItem sx={{ marginLeft: 0 }}> </MenuItem>
                             <RxAvatar />
                             <SettingsIcon />
                         </IconButton>

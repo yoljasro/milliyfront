@@ -4,7 +4,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { PuffLoader } from 'react-spinners'
 import styles from './index.module.sass';
-import { Spinner } from "react-bootstrap";
 import ProgressBar from '../ProgressBar'; // Progress barni import qilish
 
 interface Banner {

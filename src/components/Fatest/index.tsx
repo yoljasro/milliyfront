@@ -201,6 +201,12 @@ const Fatest: React.FC = () => {
                           e.stopPropagation();
                           addToCart(cardId);
                         }}
+
+
+
+ 
+
+                        
                       >
                         +
                       </button>
@@ -211,8 +217,8 @@ const Fatest: React.FC = () => {
             ))}
           </div>
           {hasItemsInCart && (
-            <div className={styles.fatest__cartActions}>
-              <button onClick={handleOrderNow}>Заказать сейчас</button>
+            <div className={styles.fatest__btncont}>
+              <button className={styles.fatest__orderNow} onClick={handleOrderNow}>Заказать сейчас</button>
             </div>
           )}
         </>
